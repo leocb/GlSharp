@@ -116,7 +116,6 @@ internal class Basic : IDisposable
         this.shader.Use();
         this.shader.SetInt("texture1", 0); // unit 0
         this.shader.SetInt("texture2", 1); // unit 1
-        this.shader.SetMat4("view", view);
         this.shader.SetMat4("projection", projection);
     }
 
@@ -138,6 +137,7 @@ internal class Basic : IDisposable
 
         GL.BindVertexArray(this.vao);
         this.shader.Use();
+        this.shader.SetMat4("view", Camera.ViewTransform);
         this.shader.SetMat4("model", model);
         this.texture1.Use(TextureUnit.Texture0);
         this.texture2.Use(TextureUnit.Texture1);

@@ -5,10 +5,11 @@ namespace GlSharp.Shaders;
 internal class Shader : IDisposable
 {
     private readonly int handle;
+    private readonly Dictionary<string, int> locationMap = new();
 
     public Shader(string vertexSourceName, string fragmentSourceName)
     {
-        this.handle = ShaderCompiler.CreateShadersLink(vertexSourceName, fragmentSourceName);
+        this.handle = GlslCompiler.CreateShadersLink(vertexSourceName, fragmentSourceName);
     }
 
     public void Use()
@@ -18,13 +19,27 @@ internal class Shader : IDisposable
 
     public int GetAttribLocation(string attribName)
     {
-        return GL.GetAttribLocation(this.handle, attribName);
+        if (!this.locationMap.TryGetValue(attribName, out int location))
+        {
+            location = GL.GetAttribLocation(this.handle, attribName);
+            _ = this.locationMap.TryAdd(attribName, location);
+        }
+
+        return location;
     }
 
     public int GetUniformLocation(string uniformName)
     {
-        return GL.GetUniformLocation(this.handle, uniformName);
+        if (!this.locationMap.TryGetValue(uniformName, out int location))
+        {
+            location = GL.GetUniformLocation(this.handle, uniformName);
+            _ = this.locationMap.TryAdd(uniformName, location);
+        }
+
+        return location;
     }
+
+    public void SetInt(string uniformName, int value) => GL.Uniform1(GetUniformLocation(uniformName), value);
 
     ~Shader()
     {

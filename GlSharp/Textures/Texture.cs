@@ -21,7 +21,7 @@ internal class Texture
 
         // Upload texture to GPU
         this.handle = GL.GenTexture();
-        Use();
+        GL.BindTexture(TextureTarget.Texture2D, this.handle);
         GL.TexImage2D(
             TextureTarget.Texture2D,
             0,
@@ -33,12 +33,13 @@ internal class Texture
             PixelType.UnsignedByte,
             image.Data);
 
-        // might not be necessary
+        // might not be necessary if the texture is never going to be smaller on screen
         GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
     }
 
-    public void Use()
+    public void Use(TextureUnit unit = TextureUnit.Texture0)
     {
+        GL.ActiveTexture(unit);
         GL.BindTexture(TextureTarget.Texture2D, this.handle);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace GlSharp.Shaders;
 
-internal static class ShaderCompiler
+internal static class GlslCompiler
 {
 
     public static int CreateShadersLink(string vertexSourceName, string fragmentSourceName)

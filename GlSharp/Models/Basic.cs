@@ -9,9 +9,9 @@ namespace GlSharp.Models;
 
 internal class Basic : IDisposable
 {
-    private readonly Stopwatch sw;
     private readonly Shader shader;
-    private readonly Texture texture;
+    private readonly Texture texture1;
+    private readonly Texture texture2;
     private readonly int vertexHandle;
     private readonly int vao; // Vertex Array Object
     private readonly int ebo; // Element Buffer Object
@@ -29,29 +29,31 @@ internal class Basic : IDisposable
 
     public Basic()
     {
-        this.sw = Stopwatch.StartNew();
-
         // Textures
-        this.texture = new("container.jpg");
+        this.texture1 = new("container.jpg");
+        this.texture2 = new("awesomeface.png");
 
         // Shaders
         this.shader = new("Basic.vert", "Basic.frag");
+        this.shader.Use();
+        this.shader.SetInt("texture1", 0); // unit 0
+        this.shader.SetInt("texture2", 1); // unit 1
 
-        // Vertex Array Object - Tells the GPU how to handle the data we send
+        // Vertex Array Object - Bundles the data into a single buffer
         this.vao = GL.GenVertexArray();
         GL.BindVertexArray(this.vao);
 
-        // The Geometry data
+        // The vertices data
         this.vertexHandle = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexHandle);
         GL.BufferData(BufferTarget.ArrayBuffer, this.vertices.Length * sizeof(float), this.vertices, BufferUsageHint.StaticDraw);
+        // Vertices attributes (data layout)
         GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 0 * sizeof(float));
         GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 3 * sizeof(float));
         GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), (3 + 3) * sizeof(float));
         GL.EnableVertexAttribArray(0);
         GL.EnableVertexAttribArray(1);
         GL.EnableVertexAttribArray(2);
-        GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
         // Element Buffer Object - How to draw the vertices
         this.ebo = GL.GenBuffer();
@@ -65,11 +67,7 @@ internal class Basic : IDisposable
         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
-        // without mipmap
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-        // with mipmap
+        // Filter mode
         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
         GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
     }
@@ -77,13 +75,10 @@ internal class Basic : IDisposable
     public void Draw()
     {
         GL.BindVertexArray(this.vao);
-        this.texture.Use();
         this.shader.Use();
+        this.texture1.Use(TextureUnit.Texture0);
+        this.texture2.Use(TextureUnit.Texture1);
         SetTextureParameters();
-
-        double timeValue = this.sw.Elapsed.TotalSeconds;
-        float greenValue = ((float)Math.Sin(timeValue) / 2.0f) + 0.5f;
-        GL.Uniform4(this.shader.GetUniformLocation("ourColor"), 0.0f, greenValue, 0.0f, 1.0f);
 
         GL.DrawElements(PrimitiveType.Triangles, this.indices.Length, DrawElementsType.UnsignedInt, 0);
     }

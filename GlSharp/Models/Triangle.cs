@@ -14,14 +14,13 @@ internal class Triangle : IDisposable
     private readonly int vao; // Vertex Array Object
     private readonly int ebo; // Element Buffer Object
     private readonly float[] vertices = {
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left
+      // positions        // colors
+      0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+     -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+      0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
     };
     private readonly uint[] indices = {
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
+        0, 1, 2,   // first triangle
     };
 
     public Triangle()
@@ -39,16 +38,16 @@ internal class Triangle : IDisposable
         this.vertexHandle = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexHandle);
         GL.BufferData(BufferTarget.ArrayBuffer, this.vertices.Length * sizeof(float), this.vertices, BufferUsageHint.StaticDraw);
-        GL.VertexAttribPointer(this.shader.GetAttribLocation("aPosition"), 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+        GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+        GL.EnableVertexAttribArray(0);
+        GL.EnableVertexAttribArray(1);
         GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
         // Element Buffer Object - How to draw the vertices
         this.ebo = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.ebo);
         GL.BufferData(BufferTarget.ElementArrayBuffer, this.indices.Length * sizeof(uint), this.indices, BufferUsageHint.StaticDraw);
-
-        // VAO - continued
-        GL.EnableVertexAttribArray(0);
     }
 
     public void Draw()

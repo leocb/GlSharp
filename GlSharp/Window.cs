@@ -39,6 +39,7 @@ internal class Window : GameWindow
 
     private void Window_Load()
     {
+        PrintHardwareSupport();
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         triangle = new();
     }
@@ -51,5 +52,13 @@ internal class Window : GameWindow
     private void Window_Resize(ResizeEventArgs e)
     {
         GL.Viewport(0, 0, e.Width, e.Height);
+    }
+
+    private void PrintHardwareSupport()
+    {
+        GL.GetInteger(GetPName.MaxVertexAttribs, out int nrAttributes);
+        Console.WriteLine($"Hardware supports:");
+        Console.WriteLine($"Max number of vertex attributes: {nrAttributes}");
+        Console.WriteLine($"---");
     }
 }

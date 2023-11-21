@@ -8,12 +8,18 @@ internal class Triangle : IDisposable
 {
     private readonly Shader shader;
     private readonly int vertexHandle;
-    private readonly int vao;
-    private readonly float[] vertices ={
-    -0.5f, -0.5f, 0.0f, //Bottom-left vertex
-     0.5f, -0.5f, 0.0f, //Bottom-right vertex
-     0.0f,  0.5f, 0.0f, //Top vertex
-};
+    private readonly int vao; // Vertex Array Object
+    private readonly int ebo; // Element Buffer Object
+    private readonly float[] vertices = {
+         0.5f,  0.5f, 0.0f,  // top right
+         0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  // bottom left
+        -0.5f,  0.5f, 0.0f   // top left
+    };
+    private readonly uint[] indices = {
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+    };
 
     public Triangle()
     {
@@ -31,6 +37,11 @@ internal class Triangle : IDisposable
         GL.VertexAttribPointer(this.shader.GetAttribLocation("aPosition"), 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
         GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
+        // Element Buffer Object - How to draw the vertices
+        this.ebo = GL.GenBuffer();
+        GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.ebo);
+        GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
+
         // VAO - continued
         GL.EnableVertexAttribArray(0);
     }
@@ -39,7 +50,7 @@ internal class Triangle : IDisposable
     {
         GL.BindVertexArray(this.vao);
         this.shader.Use();
-        GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+        GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
     }
 
     protected virtual void Dispose(bool disposing)

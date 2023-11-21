@@ -1,6 +1,7 @@
 ﻿using GlSharp.Models;
 
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -24,6 +25,13 @@ internal class Engine : GameWindow
         this.UpdateFrame += EngineUpdateFrame;
     }
 
+    private void EngineLoad()
+    {
+        PrintHardwareSupport();
+        GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        this.basicShape = new();
+    }
+
     private void EngineUpdateFrame(FrameEventArgs obj)
     {
         if (this.KeyboardState.IsKeyDown(Keys.Escape))
@@ -33,20 +41,13 @@ internal class Engine : GameWindow
     private void EngineRenderFrame(FrameEventArgs obj)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
-        basicShape?.Draw();
+        this.basicShape?.Draw();
         SwapBuffers();
-    }
-
-    private void EngineLoad()
-    {
-        PrintHardwareSupport();
-        GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        basicShape = new();
     }
 
     private void EngineUnload()
     {
-        basicShape?.Dispose();
+        this.basicShape?.Dispose();
     }
 
     private void EngineResize(ResizeEventArgs e)

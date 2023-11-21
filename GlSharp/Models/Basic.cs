@@ -50,9 +50,10 @@ internal class Basic : IDisposable
         GL.BufferData(BufferTarget.ElementArrayBuffer, this.indices.Length * sizeof(uint), this.indices, BufferUsageHint.StaticDraw);
 
         // transformation
-        Matrix4 rotation = Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(90.0f));
-        Matrix4 scale = Matrix4.CreateScale(0.5f, 0.5f, 0.5f);
-        Matrix4 trans = rotation * scale;
+#warning todo: refactor this
+        Matrix4 model = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(-55.0f));
+        Matrix4 view = Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
+        Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)800 / 800, 0.1f, 100.0f);
 
         // Textures
         this.texture1 = new("container.jpg");
@@ -63,7 +64,9 @@ internal class Basic : IDisposable
         this.shader.Use();
         this.shader.SetInt("texture1", 0); // unit 0
         this.shader.SetInt("texture2", 1); // unit 1
-        this.shader.SetMat4("transform", trans); // unit 1
+        this.shader.SetMat4("model", model); 
+        this.shader.SetMat4("view", view);
+        this.shader.SetMat4("projection", projection);
     }
 
     private void SetTextureParameters()

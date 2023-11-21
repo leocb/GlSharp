@@ -21,6 +21,11 @@ internal class Shader : IDisposable
         return GL.GetAttribLocation(this.handle, attribName);
     }
 
+    public int GetUniformLocation(string uniformName)
+    {
+        return GL.GetUniformLocation(this.handle, uniformName);
+    }
+
     ~Shader()
     {
         Dispose(false);

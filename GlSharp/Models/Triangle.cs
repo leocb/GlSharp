@@ -1,4 +1,6 @@
-﻿using GlSharp.Shaders;
+﻿using System.Diagnostics;
+
+using GlSharp.Shaders;
 
 using OpenTK.Graphics.OpenGL;
 
@@ -6,6 +8,7 @@ namespace GlSharp.Models;
 
 internal class Triangle : IDisposable
 {
+    private readonly Stopwatch sw;
     private readonly Shader shader;
     private readonly int vertexHandle;
     private readonly int vao; // Vertex Array Object
@@ -23,6 +26,8 @@ internal class Triangle : IDisposable
 
     public Triangle()
     {
+        this.sw = Stopwatch.StartNew();
+
         // Shaders
         this.shader = new("Basic.vert", "Basic.frag");
 
@@ -40,7 +45,7 @@ internal class Triangle : IDisposable
         // Element Buffer Object - How to draw the vertices
         this.ebo = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.ebo);
-        GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ElementArrayBuffer, this.indices.Length * sizeof(uint), this.indices, BufferUsageHint.StaticDraw);
 
         // VAO - continued
         GL.EnableVertexAttribArray(0);
@@ -50,7 +55,12 @@ internal class Triangle : IDisposable
     {
         GL.BindVertexArray(this.vao);
         this.shader.Use();
-        GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
+
+        double timeValue = this.sw.Elapsed.TotalSeconds;
+        float greenValue = ((float)Math.Sin(timeValue) / 2.0f) + 0.5f;
+        GL.Uniform4(this.shader.GetUniformLocation("ourColor"), 0.0f, greenValue, 0.0f, 1.0f);
+
+        GL.DrawElements(PrimitiveType.Triangles, this.indices.Length, DrawElementsType.UnsignedInt, 0);
     }
 
     protected virtual void Dispose(bool disposing)

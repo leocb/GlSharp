@@ -1,4 +1,6 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using GlSharp.Models;
+
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -7,6 +9,7 @@ namespace GlSharp;
 
 internal class Window : GameWindow
 {
+    private Triangle triangle;
     public Window(int width, int height, string title)
         : base(GameWindowSettings.Default, new NativeWindowSettings()
         {
@@ -16,6 +19,7 @@ internal class Window : GameWindow
     {
         this.Resize += Window_Resize;
         this.Load += Window_Load;
+        this.Unload += Window_Unload;
         this.RenderFrame += Window_RenderFrame;
         this.UpdateFrame += Window_UpdateFrame;
     }
@@ -29,12 +33,19 @@ internal class Window : GameWindow
     private void Window_RenderFrame(FrameEventArgs obj)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
+        triangle.Draw();
         SwapBuffers();
     }
 
     private void Window_Load()
     {
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        triangle = new();
+    }
+
+    private void Window_Unload()
+    {
+        triangle.Dispose();
     }
 
     private void Window_Resize(ResizeEventArgs e)

@@ -59,6 +59,7 @@ internal class Triangle : IDisposable
         {
             this.shader.Dispose();
             GL.DeleteBuffer(this.vertexHandle);
+            GL.DeleteBuffer(this.ebo);
             GL.DeleteVertexArray(this.vao);
         }
     }

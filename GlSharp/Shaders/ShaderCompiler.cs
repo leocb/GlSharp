@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
 namespace GlSharp.Shaders;
 
@@ -40,7 +38,7 @@ internal static class ShaderCompiler
     {
         // Compile
         int handle = GL.CreateShader(type);
-        GL.ShaderSource(handle, File.ReadAllText(Path.Combine(Environment.CurrentDirectory,"Shaders","Source",sourceName)));
+        GL.ShaderSource(handle, File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Assets", "Shaders", sourceName)));
         GL.CompileShader(handle);
 
         // Check for failure

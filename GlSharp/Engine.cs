@@ -7,54 +7,54 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
-internal class Window : GameWindow
+internal class Engine : GameWindow
 {
-    private Triangle triangle;
-    public Window(int width, int height, string title)
+    private Basic? basicShape;
+    public Engine(int width, int height, string title)
         : base(GameWindowSettings.Default, new NativeWindowSettings()
         {
             Size = (width, height),
             Title = title
         })
     {
-        this.Resize += Window_Resize;
-        this.Load += Window_Load;
-        this.Unload += Window_Unload;
-        this.RenderFrame += Window_RenderFrame;
-        this.UpdateFrame += Window_UpdateFrame;
+        this.Resize += EngineResize;
+        this.Load += EngineLoad;
+        this.Unload += EngineUnload;
+        this.RenderFrame += EngineRenderFrame;
+        this.UpdateFrame += EngineUpdateFrame;
     }
 
-    private void Window_UpdateFrame(FrameEventArgs obj)
+    private void EngineUpdateFrame(FrameEventArgs obj)
     {
         if (this.KeyboardState.IsKeyDown(Keys.Escape))
             Close();
     }
 
-    private void Window_RenderFrame(FrameEventArgs obj)
+    private void EngineRenderFrame(FrameEventArgs obj)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
-        triangle.Draw();
+        basicShape?.Draw();
         SwapBuffers();
     }
 
-    private void Window_Load()
+    private void EngineLoad()
     {
         PrintHardwareSupport();
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        triangle = new();
+        basicShape = new();
     }
 
-    private void Window_Unload()
+    private void EngineUnload()
     {
-        triangle.Dispose();
+        basicShape?.Dispose();
     }
 
-    private void Window_Resize(ResizeEventArgs e)
+    private void EngineResize(ResizeEventArgs e)
     {
         GL.Viewport(0, 0, e.Width, e.Height);
     }
 
-    private void PrintHardwareSupport()
+    private static void PrintHardwareSupport()
     {
         GL.GetInteger(GetPName.MaxVertexAttribs, out int nrAttributes);
         Console.WriteLine($"Hardware supports:");

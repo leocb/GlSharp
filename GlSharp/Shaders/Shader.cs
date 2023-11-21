@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace GlSharp.Shaders;
 
@@ -40,6 +41,7 @@ internal class Shader : IDisposable
     }
 
     public void SetInt(string uniformName, int value) => GL.Uniform1(GetUniformLocation(uniformName), value);
+    public void SetMat4(string uniformName, Matrix4 value) => GL.UniformMatrix4(GetUniformLocation(uniformName), true, ref value);
 
     ~Shader()
     {

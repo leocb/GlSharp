@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-
-using GlSharp.Shaders;
+﻿using GlSharp.Shaders;
 using GlSharp.Textures;
 
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace GlSharp.Models;
 
@@ -29,16 +28,6 @@ internal class Basic : IDisposable
 
     public Basic()
     {
-        // Textures
-        this.texture1 = new("container.jpg");
-        this.texture2 = new("awesomeface.png");
-
-        // Shaders
-        this.shader = new("Basic.vert", "Basic.frag");
-        this.shader.Use();
-        this.shader.SetInt("texture1", 0); // unit 0
-        this.shader.SetInt("texture2", 1); // unit 1
-
         // Vertex Array Object - Bundles the data into a single buffer
         this.vao = GL.GenVertexArray();
         GL.BindVertexArray(this.vao);
@@ -59,6 +48,22 @@ internal class Basic : IDisposable
         this.ebo = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.ebo);
         GL.BufferData(BufferTarget.ElementArrayBuffer, this.indices.Length * sizeof(uint), this.indices, BufferUsageHint.StaticDraw);
+
+        // transformation
+        Matrix4 rotation = Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(90.0f));
+        Matrix4 scale = Matrix4.CreateScale(0.5f, 0.5f, 0.5f);
+        Matrix4 trans = rotation * scale;
+
+        // Textures
+        this.texture1 = new("container.jpg");
+        this.texture2 = new("awesomeface.png");
+
+        // Shaders
+        this.shader = new("Basic.vert", "Basic.frag");
+        this.shader.Use();
+        this.shader.SetInt("texture1", 0); // unit 0
+        this.shader.SetInt("texture2", 1); // unit 1
+        this.shader.SetMat4("transform", trans); // unit 1
     }
 
     private void SetTextureParameters()

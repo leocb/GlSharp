@@ -1,162 +1,97 @@
 ﻿using System.Diagnostics;
 
-using GlSharp.Shaders;
-using GlSharp.Textures;
+using GlSharp.Materials;
+using GlSharp.Materials.Textures;
 
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Models;
 
-internal class Basic : IDisposable
-{
+internal class Basic : IDisposable {
     private readonly Stopwatch sw;
-    private readonly Shader shader;
-    private readonly Texture texture1;
-    private readonly Texture texture2;
+    private readonly MaterialBase material;
     private readonly int vertexHandle;
     private readonly int vao; // Vertex Array Object
     private readonly int ebo; // Element Buffer Object
 
-    // Cube:
+    private Matrix4 modelMatrix = Matrix4.CreateScale(1f);
+
     private readonly float[] vertices = {
-         // positions         // colors          // Texture coordinates
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f
+      // positions        // colors          // Texture coordinates
+      0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,  // top right
+      0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // bottom right
+     -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
+     -0.5f,  0.5f, 0.5f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f   // top left
     };
 
-    // Square:
-    //private readonly float[] vertices = {
-    //  // positions        // colors          // Texture coordinates
-    //  0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,  // top right
-    //  0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // bottom right
-    // -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
-    // -0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f   // top left
-    //};
-    //private readonly uint[] indices = {
-    //    0, 1, 3,   // first triangle
-    //    2, 3, 1,   // second triangle
-    //};
+    private readonly uint[] indices = {
+        0, 1, 3,   // first triangle
+        2, 3, 1,   // second triangle
+    };
 
-    public Basic()
-    {
+    public Basic() {
         sw = Stopwatch.StartNew();
 
-        // Vertex Array Object - Bundles the data into a single buffer
-        this.vao = GL.GenVertexArray();
-        GL.BindVertexArray(this.vao);
+        vao = GL.GenVertexArray();
+        vertexHandle = GL.GenBuffer();
+        ebo = GL.GenBuffer();
 
-        // The vertices data
-        this.vertexHandle = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ArrayBuffer, this.vertexHandle);
-        GL.BufferData(BufferTarget.ArrayBuffer, this.vertices.Length * sizeof(float), this.vertices, BufferUsageHint.StaticDraw);
-        // Vertices attributes (data layout)
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 0 * sizeof(float));
-        GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 3 * sizeof(float));
-        GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), (3 + 3) * sizeof(float));
-        GL.EnableVertexAttribArray(0);
-        GL.EnableVertexAttribArray(1);
-        GL.EnableVertexAttribArray(2);
+        Tools.TsGlCall(() => {
+            // Vertex Array Object - Bundles the data into a single buffer
+            GL.BindVertexArray(vao);
 
-        // Element Buffer Object - How to draw the vertices
-        //this.ebo = GL.GenBuffer();
-        //GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.ebo);
-        //GL.BufferData(BufferTarget.ElementArrayBuffer, this.indices.Length * sizeof(uint), this.indices, BufferUsageHint.StaticDraw);
+            // The vertices data
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexHandle);
+            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
 
+            // Vertices attributes (data layout)
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 0 * sizeof(float));
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), (3 + 3) * sizeof(float));
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
+            GL.EnableVertexAttribArray(2);
 
-        // Textures
-        this.texture1 = new("container.jpg");
-        this.texture2 = new("awesomeface.png");
+            // Element Buffer Object - How to draw the vertices
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
+        });
 
-        // Shaders
-        this.shader = new("Basic.vert", "Basic.frag");
-        this.shader.Use();
-        this.shader.SetInt("texture1", 0); // unit 0
-        this.shader.SetInt("texture2", 1); // unit 1
+        // Material
+        material = new(
+            new int[] {
+                TextureLoader.Load("container.jpg"),
+                TextureLoader.Load("awesomeface.png")
+            },"basic.vert", "basic.frag");
     }
 
-    private void SetTextureParameters()
-    {
-        // wrapping mode
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-
-        // Filter mode
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+    public void Update(float deltaTime) {
+        modelMatrix = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(sw.Elapsed.TotalSeconds * 10));
     }
 
-    public void Draw()
-    {
-#warning todo: move the update below to an update function
-        Matrix4 model = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(sw.Elapsed.TotalSeconds*10));
-
-        GL.BindVertexArray(this.vao);
-        this.shader.Use();
-        this.shader.SetMat4("model", model);
+    public void Draw() {
+        Tools.TsGlCall(() => {
+            GL.BindVertexArray(vao);
+            material.Use();
+            material.Program.SetMat4("model", modelMatrix);
 #warning TODO: These 2 should be inside a shared uniform
-        this.shader.SetMat4("view", FreeCamera.ViewMatrix);
-        this.shader.SetMat4("projection", FreeCamera.ProjectionMatrix);
-        this.texture1.Use(TextureUnit.Texture0);
-        this.texture2.Use(TextureUnit.Texture1);
-        SetTextureParameters();
-
-        GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-        //GL.DrawElements(PrimitiveType.Triangles, this.indices.Length, DrawElementsType.UnsignedInt, 0);
+            material.Program.SetMat4("view", FreeCamera.ViewMatrix);
+            material.Program.SetMat4("projection", FreeCamera.ProjectionMatrix);
+            GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
+        });
     }
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            this.shader.Dispose();
-            GL.DeleteBuffer(this.vertexHandle);
-            GL.DeleteBuffer(this.ebo);
-            GL.DeleteVertexArray(this.vao);
+    protected virtual void Dispose(bool disposing) {
+        if (disposing) {
+            material.Dispose();
+            GL.DeleteBuffer(vertexHandle);
+            GL.DeleteBuffer(ebo);
+            GL.DeleteVertexArray(vao);
         }
     }
 
-    public void Dispose()
-    {
+    public void Dispose() {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }

@@ -3,8 +3,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
-internal static class FreeCamera
-{
+internal static class FreeCamera {
     private static Vector3 up = Vector3.UnitY;
     private static Vector3 right = Vector3.UnitX;
 
@@ -23,28 +22,23 @@ internal static class FreeCamera
     internal static Matrix4 ProjectionMatrix { get; private set; }
     internal static float Speed { get; set; } = 3.5f;
 
-    internal static void Update(KeyboardState kb, Vector2 mouse, float deltaT)
-    {
+    internal static void Update(KeyboardState kb, Vector2 mouse, float deltaT) {
         UpdateCameraOrientation(mouse);
         UpdateCameraPosition(kb, deltaT);
 
         ViewMatrix = Matrix4.LookAt(position, position + front, up);
     }
 
-    public static void UpdateCameraFov(float fovDelta, Vector2 windowSize)
-    {
+    public static void UpdateCameraFov(float fovDelta, Vector2 windowSize) {
         fov = MathHelper.Clamp(fov - fovDelta, 1.0f, 90.0f);
         ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), windowSize.X / windowSize.Y, 0.1f, 100.0f);
     }
 
-
-    internal static void Init(Vector2 mouse)
-    {
+    internal static void Init(Vector2 mouse) {
         lastPos = new Vector2(mouse.X, mouse.Y);
     }
 
-    private static void UpdateCameraOrientation(Vector2 mouse)
-    {
+    private static void UpdateCameraOrientation(Vector2 mouse) {
         float deltaX = mouse.X - lastPos.X;
         float deltaY = mouse.Y - lastPos.Y;
         lastPos = new Vector2(mouse.X, mouse.Y);
@@ -62,8 +56,7 @@ internal static class FreeCamera
         up = Vector3.Normalize(Vector3.Cross(right, front));
     }
 
-    private static void UpdateCameraPosition(KeyboardState kb, float deltaT)
-    {
+    private static void UpdateCameraPosition(KeyboardState kb, float deltaT) {
         if (kb.IsKeyDown(Keys.W))
             position += front * Speed * deltaT;
         if (kb.IsKeyDown(Keys.S))

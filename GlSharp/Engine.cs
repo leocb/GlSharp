@@ -7,17 +7,14 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
-internal class Engine : GameWindow
-{
+internal class Engine : GameWindow {
     public const string TITLE = "Lengine";
     private Basic? basicShape;
     public Engine(int width, int height, string title)
-        : base(GameWindowSettings.Default, new NativeWindowSettings()
-        {
+        : base(GameWindowSettings.Default, new NativeWindowSettings() {
             Size = (width, height),
             Title = TITLE
-        })
-    {
+        }) {
         this.Resize += EngineResize;
         this.Load += EngineLoad;
         this.Unload += EngineUnload;
@@ -26,57 +23,51 @@ internal class Engine : GameWindow
         this.MouseWheel += EngineMouseWheel;
     }
 
-    private void EngineLoad()
-    {
+    private void EngineLoad() {
         PrintHardwareSupport();
         Tools.ShowFpsCounter(this);
 
-        this.CursorState = CursorState.Grabbed;
-        FreeCamera.Init(this.MousePosition);
+        CursorState = CursorState.Grabbed;
+        FreeCamera.Init(MousePosition);
 
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Enable(EnableCap.DepthTest);
-        this.basicShape = new();
+        basicShape = new();
     }
 
-    private void EngineUpdateFrame(FrameEventArgs obj)
-    {
-        if (!this.IsFocused)
+    private void EngineUpdateFrame(FrameEventArgs obj) {
+        if (!IsFocused)
             return;
 
-        if (this.KeyboardState.IsKeyDown(Keys.Escape))
+        if (KeyboardState.IsKeyDown(Keys.Escape))
             Close();
 
         Tools.UpdateAverageFps(obj.Time);
 
-        FreeCamera.Update(this.KeyboardState, this.MousePosition, (float)obj.Time);
+        FreeCamera.Update(KeyboardState, MousePosition, (float)obj.Time);
+        basicShape?.Update((float)obj.Time);
     }
 
-    private void EngineRenderFrame(FrameEventArgs obj)
-    {
+    private void EngineRenderFrame(FrameEventArgs obj) {
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        this.basicShape?.Draw();
+        basicShape?.Draw();
         SwapBuffers();
     }
 
-    private void EngineUnload()
-    {
-        this.basicShape?.Dispose();
+    private void EngineUnload() {
+        basicShape?.Dispose();
     }
 
-    private void EngineResize(ResizeEventArgs e)
-    {
+    private void EngineResize(ResizeEventArgs e) {
         GL.Viewport(0, 0, e.Width, e.Height);
-        FreeCamera.UpdateCameraFov(0.0f, this.Size);
+        FreeCamera.UpdateCameraFov(0.0f, Size);
     }
 
-    private void EngineMouseWheel(MouseWheelEventArgs obj)
-    {
-        FreeCamera.UpdateCameraFov(obj.OffsetY, this.Size);
+    private void EngineMouseWheel(MouseWheelEventArgs obj) {
+        FreeCamera.UpdateCameraFov(obj.OffsetY, Size);
     }
 
-    private static void PrintHardwareSupport()
-    {
+    private static void PrintHardwareSupport() {
         GL.GetInteger(GetPName.MaxVertexAttribs, out int nrAttributes);
         Console.WriteLine($"Hardware supports:");
         Console.WriteLine($"Max number of vertex attributes: {nrAttributes}");

@@ -102,10 +102,6 @@ internal class Basic : IDisposable
         //GL.BindBuffer(BufferTarget.ElementArrayBuffer, this.ebo);
         //GL.BufferData(BufferTarget.ElementArrayBuffer, this.indices.Length * sizeof(uint), this.indices, BufferUsageHint.StaticDraw);
 
-        // transformation
-#warning todo: refactor this
-        Matrix4 view = Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
-        Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)800 / 800, 0.1f, 100.0f);
 
         // Textures
         this.texture1 = new("container.jpg");
@@ -116,7 +112,6 @@ internal class Basic : IDisposable
         this.shader.Use();
         this.shader.SetInt("texture1", 0); // unit 0
         this.shader.SetInt("texture2", 1); // unit 1
-        this.shader.SetMat4("projection", projection);
     }
 
     private void SetTextureParameters()
@@ -137,8 +132,10 @@ internal class Basic : IDisposable
 
         GL.BindVertexArray(this.vao);
         this.shader.Use();
-        this.shader.SetMat4("view", FreeCamera.ViewTransform);
         this.shader.SetMat4("model", model);
+#warning TODO: These 2 should be inside a shared uniform
+        this.shader.SetMat4("view", FreeCamera.ViewMatrix);
+        this.shader.SetMat4("projection", FreeCamera.ProjectionMatrix);
         this.texture1.Use(TextureUnit.Texture0);
         this.texture2.Use(TextureUnit.Texture1);
         SetTextureParameters();

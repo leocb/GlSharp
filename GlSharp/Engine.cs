@@ -23,6 +23,7 @@ internal class Engine : GameWindow
         this.Unload += EngineUnload;
         this.RenderFrame += EngineRenderFrame;
         this.UpdateFrame += EngineUpdateFrame;
+        this.MouseWheel += EngineMouseWheel;
     }
 
     private void EngineLoad()
@@ -66,6 +67,12 @@ internal class Engine : GameWindow
     private void EngineResize(ResizeEventArgs e)
     {
         GL.Viewport(0, 0, e.Width, e.Height);
+        FreeCamera.UpdateCameraFov(0.0f, this.Size);
+    }
+
+    private void EngineMouseWheel(MouseWheelEventArgs obj)
+    {
+        FreeCamera.UpdateCameraFov(obj.OffsetY, this.Size);
     }
 
     private static void PrintHardwareSupport()

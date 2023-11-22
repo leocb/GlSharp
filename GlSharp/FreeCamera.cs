@@ -16,8 +16,11 @@ internal static class FreeCamera
     private static float yaw = -90.0f;
     private static float pitch = 0.0f;
 
+    private static float fov = 90.0f;
+
     internal static float Sensitivity { get; private set; } = 0.1f;
-    internal static Matrix4 ViewTransform { get; private set; }
+    internal static Matrix4 ViewMatrix { get; private set; }
+    internal static Matrix4 ProjectionMatrix { get; private set; }
     internal static float Speed { get; set; } = 3.5f;
 
     internal static void Update(KeyboardState kb, Vector2 mouse, float deltaT)
@@ -25,8 +28,15 @@ internal static class FreeCamera
         UpdateCameraOrientation(mouse);
         UpdateCameraPosition(kb, deltaT);
 
-        ViewTransform = Matrix4.LookAt(position, position + front, up);
+        ViewMatrix = Matrix4.LookAt(position, position + front, up);
     }
+
+    public static void UpdateCameraFov(float fovDelta, Vector2 windowSize)
+    {
+        fov = MathHelper.Clamp(fov - fovDelta, 1.0f, 90.0f);
+        ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), windowSize.X / windowSize.Y, 0.1f, 100.0f);
+    }
+
 
     internal static void Init(Vector2 mouse)
     {
@@ -41,7 +51,7 @@ internal static class FreeCamera
 
         yaw += deltaX * Sensitivity;
 
-        pitch = Math.Min(Math.Max(pitch - (deltaY * Sensitivity), -89.0f), 89.0f);
+        pitch = MathHelper.Clamp(pitch - (deltaY * Sensitivity), -89.0f, 89.0f);
 
         front.X = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Cos(MathHelper.DegreesToRadians(yaw));
         front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));

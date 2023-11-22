@@ -1,14 +1,17 @@
 ﻿using System.Diagnostics;
 
+using GlSharp.Cameras;
+using GlSharp.Entities;
 using GlSharp.Materials;
 using GlSharp.Materials.Textures;
+using GlSharp.Scene;
 
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Models;
 
-internal class Basic : IDisposable {
+internal class Basic : IEntity {
     private readonly Stopwatch sw;
     private readonly MaterialBase material;
     private readonly int vertexHandle;
@@ -21,8 +24,8 @@ internal class Basic : IDisposable {
       // positions        // colors          // Texture coordinates
       0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,  // top right
       0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // bottom right
-     -0.5f, -0.5f, 0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
-     -0.5f,  0.5f, 0.5f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f   // top left
+     -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
+     -0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f   // top left
     };
 
     private readonly uint[] indices = {
@@ -66,18 +69,18 @@ internal class Basic : IDisposable {
             },"basic.vert", "basic.frag");
     }
 
-    public void Update(float deltaTime) {
-        modelMatrix = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(sw.Elapsed.TotalSeconds * 10));
+    public void Update(float time) {
+        modelMatrix = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(sw.Elapsed.TotalSeconds * 90));
     }
 
-    public void Draw() {
+    public void Draw(float time) {
         Tools.TsGlCall(() => {
             GL.BindVertexArray(vao);
             material.Use();
             material.Program.SetMat4("model", modelMatrix);
 #warning TODO: These 2 should be inside a shared uniform
-            material.Program.SetMat4("view", FreeCamera.ViewMatrix);
-            material.Program.SetMat4("projection", FreeCamera.ProjectionMatrix);
+            material.Program.SetMat4("view", SceneManager.GetViewMatrix);
+            material.Program.SetMat4("projection", SceneManager.GetProjectionMatrix);
             GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
         });
     }

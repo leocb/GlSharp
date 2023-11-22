@@ -1,4 +1,9 @@
-﻿using GlSharp.Models;
+﻿using System.Runtime.CompilerServices;
+
+using GlSharp.Cameras;
+using GlSharp.Models;
+using GlSharp.Scene;
+using GlSharp.Scenes;
 
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
@@ -7,9 +12,11 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
-internal class Engine : GameWindow {
+public class Engine : GameWindow {
     public const string TITLE = "Lengine";
-    private Basic? basicShape;
+
+    public static GameWindow Window;
+    
     public Engine(int width, int height, string title)
         : base(GameWindowSettings.Default, new NativeWindowSettings() {
             Size = (width, height),
@@ -17,10 +24,11 @@ internal class Engine : GameWindow {
         }) {
         this.Resize += EngineResize;
         this.Load += EngineLoad;
-        this.Unload += EngineUnload;
         this.RenderFrame += EngineRenderFrame;
         this.UpdateFrame += EngineUpdateFrame;
         this.MouseWheel += EngineMouseWheel;
+
+        Window = this;
     }
 
     private void EngineLoad() {
@@ -28,43 +36,36 @@ internal class Engine : GameWindow {
         Tools.ShowFpsCounter(this);
 
         CursorState = CursorState.Grabbed;
-        FreeCamera.Init(MousePosition);
+        //VSync = VSyncMode.On;
 
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Enable(EnableCap.DepthTest);
-        basicShape = new();
+
+        SceneManager.SetActiveScene(new SimpleScene());
+
     }
 
     private void EngineUpdateFrame(FrameEventArgs obj) {
         if (!IsFocused)
             return;
 
-        if (KeyboardState.IsKeyDown(Keys.Escape))
-            Close();
-
         Tools.UpdateAverageFps(obj.Time);
-
-        FreeCamera.Update(KeyboardState, MousePosition, (float)obj.Time);
-        basicShape?.Update((float)obj.Time);
+        SceneManager.Update(obj);
     }
 
     private void EngineRenderFrame(FrameEventArgs obj) {
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        basicShape?.Draw();
+        SceneManager.Draw(obj);
         SwapBuffers();
-    }
-
-    private void EngineUnload() {
-        basicShape?.Dispose();
     }
 
     private void EngineResize(ResizeEventArgs e) {
         GL.Viewport(0, 0, e.Width, e.Height);
-        FreeCamera.UpdateCameraFov(0.0f, Size);
+        SceneManager.GetActiveCamera.ChangeWindowSize(Size);
     }
 
     private void EngineMouseWheel(MouseWheelEventArgs obj) {
-        FreeCamera.UpdateCameraFov(obj.OffsetY, Size);
+        SceneManager.GetActiveCamera.ChangeFov(-obj.OffsetY);
     }
 
     private static void PrintHardwareSupport() {

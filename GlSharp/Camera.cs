@@ -5,7 +5,8 @@ namespace GlSharp;
 
 internal static class Camera
 {
-    private static readonly Vector3 up = Vector3.UnitY;
+    private static Vector3 up = Vector3.UnitY;
+    private static Vector3 right = Vector3.UnitX;
 
     private static Vector2 lastPos;
 
@@ -21,8 +22,8 @@ internal static class Camera
 
     internal static void Update(KeyboardState kb, Vector2 mouse, float deltaT)
     {
-        UpdateCameraPosition(kb, deltaT);
         UpdateCameraOrientation(mouse);
+        UpdateCameraPosition(kb, deltaT);
 
         ViewTransform = Matrix4.LookAt(position, position + front, up);
     }
@@ -46,6 +47,9 @@ internal static class Camera
         front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));
         front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
         front = Vector3.Normalize(front);
+
+        right = Vector3.Normalize(Vector3.Cross(front, Vector3.UnitY));
+        up = Vector3.Normalize(Vector3.Cross(right, front));
     }
 
     private static void UpdateCameraPosition(KeyboardState kb, float deltaT)
@@ -55,9 +59,9 @@ internal static class Camera
         if (kb.IsKeyDown(Keys.S))
             position -= front * Speed * deltaT;
         if (kb.IsKeyDown(Keys.A))
-            position -= Vector3.Normalize(Vector3.Cross(front, up)) * Speed * deltaT;
+            position -= right * Speed * deltaT;
         if (kb.IsKeyDown(Keys.D))
-            position += Vector3.Normalize(Vector3.Cross(front, up)) * Speed * deltaT;
+            position += right * Speed * deltaT;
         if (kb.IsKeyDown(Keys.LeftShift))
             position += up * Speed * deltaT;
         if (kb.IsKeyDown(Keys.LeftControl))

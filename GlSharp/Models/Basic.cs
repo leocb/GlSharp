@@ -137,7 +137,7 @@ internal class Basic : IDisposable
 
         GL.BindVertexArray(this.vao);
         this.shader.Use();
-        this.shader.SetMat4("view", Camera.ViewTransform);
+        this.shader.SetMat4("view", FreeCamera.ViewTransform);
         this.shader.SetMat4("model", model);
         this.texture1.Use(TextureUnit.Texture0);
         this.texture2.Use(TextureUnit.Texture1);

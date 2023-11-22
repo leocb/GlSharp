@@ -31,7 +31,7 @@ internal class Engine : GameWindow
         Tools.ShowFpsCounter(this);
 
         this.CursorState = CursorState.Grabbed;
-        Camera.Init(this.MousePosition);
+        FreeCamera.Init(this.MousePosition);
 
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Enable(EnableCap.DepthTest);
@@ -48,7 +48,7 @@ internal class Engine : GameWindow
 
         Tools.UpdateAverageFps(obj.Time);
 
-        Camera.Update(this.KeyboardState, this.MousePosition, (float)obj.Time);
+        FreeCamera.Update(this.KeyboardState, this.MousePosition, (float)obj.Time);
     }
 
     private void EngineRenderFrame(FrameEventArgs obj)

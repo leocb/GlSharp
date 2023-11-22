@@ -3,7 +3,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
-internal static class Camera
+internal static class FreeCamera
 {
     private static Vector3 up = Vector3.UnitY;
     private static Vector3 right = Vector3.UnitX;

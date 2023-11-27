@@ -12,7 +12,6 @@ using OpenTK.Mathematics;
 namespace GlSharp.Models;
 
 internal class Basic : IEntity {
-    private readonly Stopwatch sw;
     private readonly MaterialBase material;
     private readonly int vertexHandle;
     private readonly int vao; // Vertex Array Object
@@ -34,7 +33,6 @@ internal class Basic : IEntity {
     };
 
     public Basic() {
-        sw = Stopwatch.StartNew();
 
         vao = GL.GenVertexArray();
         vertexHandle = GL.GenBuffer();
@@ -70,13 +68,14 @@ internal class Basic : IEntity {
     }
 
     public void Update(float time) {
-        modelMatrix = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(sw.Elapsed.TotalSeconds * 90));
+        modelMatrix = Matrix4.CreateRotationX((float)MathHelper.DegreesToRadians(Engine.Time.Elapsed.TotalSeconds * 90));
     }
 
     public void Draw(float time) {
         Tools.TsGlCall(() => {
             GL.BindVertexArray(vao);
             material.Use();
+#warning TODO: Only upload again if changed
             material.Program.SetMat4("model", modelMatrix);
 #warning TODO: These 2 should be inside a shared uniform
             material.Program.SetMat4("view", SceneManager.GetViewMatrix);

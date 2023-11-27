@@ -1,14 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
 
-using GlSharp.Cameras;
-using GlSharp.Models;
 using GlSharp.Scene;
 using GlSharp.Scenes;
 
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
@@ -16,7 +13,8 @@ public class Engine : GameWindow {
     public const string TITLE = "Lengine";
 
     public static GameWindow Window;
-    
+    public static Stopwatch Time { get; } = Stopwatch.StartNew();
+
     public Engine(int width, int height, string title)
         : base(GameWindowSettings.Default, new NativeWindowSettings() {
             Size = (width, height),
@@ -37,6 +35,7 @@ public class Engine : GameWindow {
 
         CursorState = CursorState.Grabbed;
         //VSync = VSyncMode.On;
+        UpdateFrequency = 60;
 
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Enable(EnableCap.DepthTest);

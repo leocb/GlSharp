@@ -34,8 +34,8 @@ public class Engine : GameWindow {
         Tools.ShowFpsCounter(this);
 
         CursorState = CursorState.Grabbed;
-        //VSync = VSyncMode.On;
-        UpdateFrequency = 60;
+        VSync = VSyncMode.On;
+        //UpdateFrequency = 60;
 
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Enable(EnableCap.DepthTest);

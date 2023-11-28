@@ -1,7 +1,4 @@
-﻿
-using System.Drawing;
-
-using GlSharp.Cameras;
+﻿using GlSharp.Cameras;
 using GlSharp.Entities;
 using GlSharp.Models;
 using GlSharp.Scene;
@@ -18,7 +15,7 @@ public class SimpleScene : SceneBase {
     public override void Load() {
         GameWindow window = Engine.Window;
 
-        entityList.Add(new Basic());
+        entityList.Add(new PlaneModel());
 
         ActiveCamera = new FreeCamera();
         ActiveCamera.Init(window.MousePosition, window.Size);
@@ -29,6 +26,9 @@ public class SimpleScene : SceneBase {
 
         if (window.KeyboardState.IsKeyDown(Keys.Escape))
             window.Close();
+
+        if (window.KeyboardState.IsKeyDown(Keys.R))
+            SceneManager.SetActiveScene(new SimpleScene());
 
         if (SceneManager.GetActiveCamera is FreeCamera camera) {
             camera.UpdateOrientationPosition(window.MousePosition, window.KeyboardState, (float)args.Time);

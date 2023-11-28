@@ -3,7 +3,7 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Shaders;
 
-internal class Program : IDisposable {
+public class Program : IProgram {
     private readonly int handle;
     private readonly Dictionary<string, int> locationMap = new();
 

@@ -4,12 +4,12 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GlSharp.Materials;
 
-internal class MaterialBase : IDisposable {
+public class MaterialBase : IMaterial {
 
-    internal Shaders.Program Program { get; private set; }
+    public Shaders.Program Program { get; private set; }
     private int[] textureHandles;
 
-    internal int[] TextureHandles {
+    public int[] TextureHandles {
         get => textureHandles;
         private set {
             textureHandles = value;
@@ -22,12 +22,12 @@ internal class MaterialBase : IDisposable {
         }
     }
 
-    internal MaterialBase(int[] textures, string vertexShader, string fragShader) {
+    public MaterialBase(int[] textures, string vertexShader, string fragShader) {
         Program = new Shaders.Program(vertexShader, fragShader);
         TextureHandles = textures ?? Array.Empty<int>();
     }
 
-    internal void Use() {
+    public void Use() {
         SetTextureParameters();
         Program.Use();
 

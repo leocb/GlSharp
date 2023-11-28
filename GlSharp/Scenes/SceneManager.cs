@@ -1,10 +1,7 @@
 ﻿using GlSharp.Cameras;
-using GlSharp.Scenes;
 
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp.Scene;
 public static class SceneManager {

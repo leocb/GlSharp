@@ -27,10 +27,6 @@ public abstract class BaseModel : IEntity {
 
     public abstract uint[] Indices { get; }
 
-    protected BaseModel() : this(null, null, null) { }
-    protected BaseModel(Vector3? position) : this(position, null, null) { }
-    protected BaseModel(Vector3? position, Quaternion? rotation) : this(position, rotation, null) { }
-    protected BaseModel(Vector3? position, Vector3? scale) : this(position, null, scale) { }
     protected BaseModel(Vector3? position, Quaternion? rotation, Vector3? scale) {
         vao = GL.GenVertexArray();
         ebo = GL.GenBuffer();
@@ -81,7 +77,7 @@ public abstract class BaseModel : IEntity {
         });
     }
 
-    private void UpdateMatrix() {
+    public void UpdateMatrix() {
         ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateFromQuaternion(rotation) * Matrix4.CreateTranslation(position);
     }
 

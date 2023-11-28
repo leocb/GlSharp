@@ -20,7 +20,7 @@ public class PlaneModel : BaseModel {
         2, 3, 1,   // second triangle
     };
 
-    public PlaneModel() : base() {
+    public PlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale) : base(position, rotation, scale) {
 
         // Material
         Material = new MaterialBase(

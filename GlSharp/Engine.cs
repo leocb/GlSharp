@@ -6,19 +6,23 @@ using GlSharp.Scenes;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
 public class Engine : GameWindow {
     public const string TITLE = "Lengine";
 
-    public static GameWindow Window;
+    public static GameWindow window;
     public static Stopwatch Time { get; } = Stopwatch.StartNew();
 
-    public Engine(int width, int height, string title)
+    public Engine(int width, int height)
         : base(GameWindowSettings.Default, new NativeWindowSettings() {
             Size = (width, height),
-            Title = TITLE
+            Title = TITLE,
+#if DEBUG
+            Flags = ContextFlags.Debug
+#endif
         }) {
         this.Resize += EngineResize;
         this.Load += EngineLoad;
@@ -26,7 +30,7 @@ public class Engine : GameWindow {
         this.UpdateFrame += EngineUpdateFrame;
         this.MouseWheel += EngineMouseWheel;
 
-        Window = this;
+        window = this;
     }
 
     private void EngineLoad() {
@@ -37,7 +41,14 @@ public class Engine : GameWindow {
         VSync = VSyncMode.On;
         //UpdateFrequency = 60;
 
+#if DEBUG
+        GL.DebugMessageCallback(Debug.DebugMessageDelegate, IntPtr.Zero);
+        GL.Enable(EnableCap.DebugOutput);
+        GL.Enable(EnableCap.DebugOutputSynchronous);
+#endif
+
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);
 
         SceneManager.SetActiveScene(new SimpleScene());
@@ -47,6 +58,9 @@ public class Engine : GameWindow {
     private void EngineUpdateFrame(FrameEventArgs obj) {
         if (!IsFocused)
             return;
+
+        if (window.KeyboardState.IsKeyDown(Keys.R))
+            SceneManager.SetActiveScene(new SimpleScene());
 
         Tools.UpdateAverageFps(obj.Time);
         SceneManager.Update(obj);

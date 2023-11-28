@@ -7,7 +7,7 @@ namespace GlSharp.Materials;
 public class MaterialBase : IMaterial {
 
     public Shaders.Program Program { get; private set; }
-    private int[] textureHandles;
+    private int[] textureHandles = Array.Empty<int>();
 
     public int[] TextureHandles {
         get => textureHandles;
@@ -28,7 +28,6 @@ public class MaterialBase : IMaterial {
     }
 
     public void Use() {
-        SetTextureParameters();
         Program.Use();
 
         for (int i = 0; i < TextureHandles.Length; i++) {
@@ -36,21 +35,12 @@ public class MaterialBase : IMaterial {
         }
     }
 
-    private void SetTextureParameters() {
-        // wrapping mode
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-
-        // Filter mode
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
-        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-    }
-
     protected virtual void Dispose(bool disposing) {
         if (!disposing)
             return;
 
         Program.Dispose();
+        GL.DeleteTextures(textureHandles.Length, textureHandles);
     }
 
     public void Dispose() {

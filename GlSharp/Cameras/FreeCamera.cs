@@ -48,6 +48,7 @@ internal class FreeCamera : ICamera {
     public void Init(Vector2 mouse, Vector2 windowSize) {
         this.windowSize = windowSize;
         lastMouse = new Vector2(mouse.X, mouse.Y);
+        UpdateProjectionMatrix();
     }
 
     public void SetPosition(Vector3 position) { }

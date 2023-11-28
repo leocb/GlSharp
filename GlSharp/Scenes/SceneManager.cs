@@ -1,4 +1,5 @@
 ﻿using GlSharp.Cameras;
+using GlSharp.Scenes;
 
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -6,12 +7,13 @@ using OpenTK.Windowing.Common;
 namespace GlSharp.Scene;
 public static class SceneManager {
 
-    private static IScene activeScene = new SceneBase();
+    private static IScene activeScene = new BlankScene();
 
     public static void SetActiveScene(IScene scene) {
-        activeScene.Close();
+        scene.Load();
+        IScene prevScene = activeScene;
         activeScene = scene;
-        activeScene.Load();
+        prevScene.Close();
     }
 
     public static void Update(FrameEventArgs args) {

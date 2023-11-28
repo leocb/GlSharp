@@ -23,10 +23,6 @@ public class PlaneModel : BaseModel {
     public PlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale) : base(position, rotation, scale) {
 
         // Material
-        Material = new MaterialBase(
-            new int[] {
-                TextureLoader.Load("container.jpg"),
-                TextureLoader.Load("awesomeface.png")
-            }, "basic.vert", "basic.frag");
+        Material = new AwesomeCrateMaterial();
     }
 }

@@ -4,14 +4,14 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GlSharp.Materials;
 
-public class MaterialBase : IMaterial {
+public abstract class MaterialBase : IMaterial {
 
     public Shaders.Program Program { get; private set; }
     private int[] textureHandles = Array.Empty<int>();
 
-    public int[] TextureHandles {
+    private int[] TextureHandles {
         get => textureHandles;
-        private set {
+        set {
             textureHandles = value;
             Tools.TsGlCall(() => {
                 Program.Use();
@@ -22,12 +22,12 @@ public class MaterialBase : IMaterial {
         }
     }
 
-    public MaterialBase(int[] textures, string vertexShader, string fragShader) {
+    protected MaterialBase(int[] textures, string vertexShader, string fragShader) {
         Program = new Shaders.Program(vertexShader, fragShader);
         TextureHandles = textures ?? Array.Empty<int>();
     }
 
-    public void Use() {
+    public virtual void Use() {
         Program.Use();
 
         for (int i = 0; i < TextureHandles.Length; i++) {
@@ -40,7 +40,6 @@ public class MaterialBase : IMaterial {
             return;
 
         Program.Dispose();
-        GL.DeleteTextures(textureHandles.Length, textureHandles);
     }
 
     public void Dispose() {

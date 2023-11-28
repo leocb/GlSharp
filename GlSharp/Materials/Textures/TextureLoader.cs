@@ -5,11 +5,20 @@ using StbImageSharp;
 namespace GlSharp.Materials.Textures;
 
 internal static class TextureLoader {
+
+    private static readonly Dictionary<int,int> textureList = new System.Collections.Generic.Dictionary<int,int>();
+
     public static int Load(string fileName,
                            bool generateMipmap = true,
                            TextureWrapMode wrapMode = TextureWrapMode.Repeat,
                            TextureMinFilter minFilter = TextureMinFilter.LinearMipmapLinear,
                            TextureMagFilter magFilter = TextureMagFilter.Linear) {
+
+        // First, check if a texture with all the parameters was already created
+        int hash = fileName.GetHashCode() + generateMipmap.GetHashCode() + wrapMode.GetHashCode() + minFilter.GetHashCode() + magFilter.GetHashCode();
+
+        if (textureList.TryGetValue(hash, out int handle))
+            return handle;
 
         // Load the image
         StbImage.stbi_set_flip_vertically_on_load(1);
@@ -17,7 +26,7 @@ internal static class TextureLoader {
         ImageResult image = ImageResult.FromStream(fs, ColorComponents.RedGreenBlueAlpha);
 
         // Upload texture to GPU
-        int handle = GL.GenTexture();
+        handle = GL.GenTexture();
         Tools.TsGlCall(() => {
             GL.BindTexture(TextureTarget.Texture2D, handle);
             GL.TexImage2D(
@@ -45,11 +54,18 @@ internal static class TextureLoader {
 
         });
 
+        textureList.Add(hash, handle);
+
         return handle;
     }
 
     public static void Use(int handle, TextureUnit unit = TextureUnit.Texture0) {
         GL.ActiveTexture(unit);
         GL.BindTexture(TextureTarget.Texture2D, handle);
+    }
+
+    public static void UnloadAllTextures() {
+        int[] texHandles = textureList.Values.ToArray();
+        GL.DeleteTextures(texHandles.Length, texHandles);
     }
 }

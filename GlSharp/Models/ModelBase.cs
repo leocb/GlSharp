@@ -6,7 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Models;
-public abstract class BaseModel : IEntity {
+public abstract class ModelBase : IEntity {
 
     private readonly int vao; // Vertex Array Object
     private readonly int ebo; // Vertex Array Object
@@ -27,7 +27,7 @@ public abstract class BaseModel : IEntity {
 
     public abstract uint[] Indices { get; }
 
-    protected BaseModel(Vector3? position, Quaternion? rotation, Vector3? scale) {
+    protected ModelBase(Vector3? position, Quaternion? rotation, Vector3? scale) {
         vao = GL.GenVertexArray();
         ebo = GL.GenBuffer();
         vertexHandle = GL.GenBuffer();

@@ -5,7 +5,7 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Models;
 
-public class PlaneModel : BaseModel {
+public class PlaneModel : ModelBase {
 
     public override float[] Vertices => new float[] {
       // positions        // colors          // Texture coordinates
@@ -21,7 +21,6 @@ public class PlaneModel : BaseModel {
     };
 
     public PlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale) : base(position, rotation, scale) {
-
         // Material
         Material = new AwesomeCrateMaterial();
     }

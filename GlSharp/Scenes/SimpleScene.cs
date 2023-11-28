@@ -14,6 +14,7 @@ public class SimpleScene : SceneBase {
         ActiveCamera.Init(Engine.window.MousePosition, Engine.window.Size);
 
         entityList.Add(new PlaneModel(new(0f, 0f, 0f), null, null));
+        entityList.Add(new CubeModel(new(2f, 0f, 0f), null, null));
     }
 
     public override void Update(FrameEventArgs args) {

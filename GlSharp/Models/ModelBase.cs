@@ -1,4 +1,5 @@
-﻿using GlSharp.Entities;
+﻿using GlSharp.Behavior;
+using GlSharp.Entities;
 using GlSharp.Materials;
 using GlSharp.Scene;
 
@@ -8,6 +9,7 @@ using OpenTK.Mathematics;
 namespace GlSharp.Models;
 public abstract class ModelBase : IEntity {
 
+    protected List<IBehavior> behaviorList;
     private readonly int vao; // Vertex Array Object
     private readonly int ebo; // Vertex Array Object
     private readonly int vertexHandle; // Vertex Array Object
@@ -27,7 +29,7 @@ public abstract class ModelBase : IEntity {
 
     public abstract uint[] Indices { get; }
 
-    protected ModelBase(Vector3? position, Quaternion? rotation, Vector3? scale) {
+    protected ModelBase(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList) {
         vao = GL.GenVertexArray();
         ebo = GL.GenBuffer();
         vertexHandle = GL.GenBuffer();
@@ -57,11 +59,12 @@ public abstract class ModelBase : IEntity {
         this.position = position ?? new Vector3(0f, 0f, 0f);
         this.rotation = rotation ?? new Quaternion(0f, 0f, 0f);
         this.scale = scale ?? new Vector3(1f, 1f, 1f);
+        this.behaviorList = behaviorList ?? new List<IBehavior>();
         UpdateMatrix();
     }
 
     public virtual void Update(float time) {
-
+        this.behaviorList.ForEach(b => b.Update(this, time));
     }
 
     public virtual void Draw(float time) {

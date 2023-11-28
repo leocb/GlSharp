@@ -1,5 +1,5 @@
-﻿using GlSharp.Materials;
-using GlSharp.Materials.Textures;
+﻿using GlSharp.Behavior;
+using GlSharp.Materials;
 
 using OpenTK.Mathematics;
 
@@ -20,7 +20,7 @@ public class PlaneModel : ModelBase {
         2, 3, 1,   // second triangle
     };
 
-    public PlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale) : base(position, rotation, scale) {
+    public PlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList) : base(position, rotation, scale, behaviorList) {
         // Material
         Material = new AwesomeCrateMaterial();
     }

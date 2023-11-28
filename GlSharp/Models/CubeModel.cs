@@ -1,4 +1,5 @@
-﻿using GlSharp.Materials;
+﻿using GlSharp.Behavior;
+using GlSharp.Materials;
 
 using OpenTK.Mathematics;
 
@@ -62,7 +63,7 @@ internal class CubeModel : ModelBase {
     };
 
 
-    public CubeModel(Vector3? position, Quaternion? rotation, Vector3? scale) : base(position, rotation, scale) {
+    public CubeModel(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList) : base(position, rotation, scale, behaviorList) {
         // Material
         Material = new AwesomeCrateMaterial();
     }

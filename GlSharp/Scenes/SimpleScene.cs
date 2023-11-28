@@ -18,11 +18,16 @@ public class SimpleScene : SceneBase {
 
     public override void Update(FrameEventArgs args) {
 
-        if (Engine.window.KeyboardState.IsKeyDown(Keys.Escape))
+        KeyboardState keyboard = Engine.window.KeyboardState;
+
+        if (keyboard.IsKeyDown(Keys.Escape))
             Engine.window.Close();
 
+        if (keyboard.IsKeyDown(Keys.R))
+            SceneManager.SetActiveScene(new SimpleScene());
+
         if (SceneManager.GetActiveCamera is FreeCamera camera) {
-            camera.UpdateOrientationPosition(Engine.window.MousePosition, Engine.window.KeyboardState, (float)args.Time);
+            camera.UpdateOrientationPosition(Engine.window.MousePosition, keyboard, (float)args.Time);
         }
 
         foreach (IEntity entity in entityList) {

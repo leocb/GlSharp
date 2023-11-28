@@ -59,9 +59,6 @@ public class Engine : GameWindow {
         if (!IsFocused)
             return;
 
-        if (window.KeyboardState.IsKeyDown(Keys.R))
-            SceneManager.SetActiveScene(new SimpleScene());
-
         Tools.UpdateAverageFps(obj.Time);
         SceneManager.Update(obj);
     }

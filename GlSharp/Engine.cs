@@ -38,7 +38,7 @@ public class Engine : GameWindow {
         Tools.ShowFpsCounter(this);
 
         CursorState = CursorState.Grabbed;
-        VSync = VSyncMode.On;
+        //VSync = VSyncMode.On;
         //UpdateFrequency = 60;
 
 #if DEBUG
@@ -51,7 +51,7 @@ public class Engine : GameWindow {
         GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);
 
-        SceneManager.SetActiveScene(new SimpleScene());
+        SceneManager.SetActiveScene(new LightScene());
 
     }
 

@@ -13,6 +13,10 @@ public abstract class MaterialBase : IMaterial {
         get => textureHandles;
         set {
             textureHandles = value;
+
+            if (textureHandles.Length <= 0)
+                return;
+
             Tools.TsGlCall(() => {
                 Program.Use();
                 for (int i = 0; i < value?.Length; i++) {

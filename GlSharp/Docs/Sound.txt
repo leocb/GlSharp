@@ -1,0 +1,9 @@
+hrtf MHR Library:
+https://airtable.com/appayGNkn3nSuXkaz/shr5XlSSu1VJCljNg/tbloLjoZKWJDnLtTc
+
+OPEN AL configuration database:
+https://airtable.com/appayGNkn3nSuXkaz/shrdPdBoULb1vRCNI
+
+compiled dll can be downloaded here:
+https://openal-soft.org/
+

@@ -8,11 +8,11 @@ namespace GlSharp.Models;
 public class PlaneModel : ModelBase {
 
     public override float[] Vertices => new float[] {
-      // positions        // colors          // Texture coordinates
-      0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,  // top right
-      0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // bottom right
-     -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
-     -0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f   // top left
+      // positions        // colors          // UV        // Normal
+      0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,  0f, 0f, 1f,  // top right
+      0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  0f, 0f, 1f,  // bottom right
+     -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  0f, 0f, 1f,  // bottom left
+     -0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f,  0f, 0f, 1f,   // top left
     };
 
     public override uint[] Indices => new uint[] {

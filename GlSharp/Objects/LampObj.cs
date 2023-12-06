@@ -6,15 +6,21 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Objects;
 public class LampObj : CubeModel {
+    public Vector3 LightColor { get; private set; }
 
-    public LampObj(Vector3 objectColor, Vector3 lightColor, Vector3? position, List<IBehavior>? behaviorList)
+    public LampObj(Vector3? position, Vector3 lightColor, List<IBehavior>? behaviorList)
         : base(position, null, new(0.1f, 0.1f, 0.1f), behaviorList) {
-        Material = new LightMaterial(objectColor, lightColor);
+        LightColor = lightColor;
+
+        Material = new LightMaterial(LightColor);
     }
 
-    public void UpdateLightColor(Vector3? objectColor = null, Vector3? lightColor = null) {
+    public void UpdateLightColor(Vector3? lightColor = null) {
+        if (lightColor is not null)
+            LightColor = lightColor.Value;
+
         if (Material is LightMaterial light) {
-            light.UpdateLightColor(objectColor, lightColor);
+            light.UpdateLightColor(LightColor);
         }
     }
 }

@@ -43,12 +43,20 @@ public abstract class ModelBase : IEntity {
             GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Length * sizeof(float), Vertices, BufferUsageHint.StaticDraw);
 
             // Vertices attributes (data layout)
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 0 * sizeof(float));
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), 3 * sizeof(float));
-            GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2) * sizeof(float), (3 + 3) * sizeof(float));
+            // position
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), 0 * sizeof(float));
+            // color
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), 3 * sizeof(float));
+            // uv
+            GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), (3 + 3) * sizeof(float));
+            // normal
+            GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), (3 + 3 + 2) * sizeof(float));
+
+            // Enable atributes
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
+            GL.EnableVertexAttribArray(3);
 
             // Element Buffer Object - How to draw the vertices
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);

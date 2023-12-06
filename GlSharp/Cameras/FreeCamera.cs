@@ -3,9 +3,9 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp.Cameras;
 
-internal class FreeCamera : ICamera {
+public class FreeCamera : ICamera {
 
-    private Vector3 position = new(0.0f, 0.0f, 3.0f);
+    public Vector3 Position { get; private set; } = new(0.0f, 0.0f, 3.0f);
     private Vector3 front = new(0.0f, 0.0f, 0.0f);
     private Vector3 up = Vector3.UnitY;
     private Vector3 right = Vector3.UnitX;
@@ -32,7 +32,7 @@ internal class FreeCamera : ICamera {
     }
 
     public void UpdateViewMatrix() {
-        ViewMatrix = Matrix4.LookAt(position, position + front, up);
+        ViewMatrix = Matrix4.LookAt(Position, Position + front, up);
     }
 
     public void ChangeWindowSize(Vector2 newWindowSize) {
@@ -75,16 +75,16 @@ internal class FreeCamera : ICamera {
 
     private void UpdateCameraPosition(KeyboardState kb, float deltaT) {
         if (kb.IsKeyDown(Keys.W))
-            position += front * Speed * deltaT;
+            Position += front * Speed * deltaT;
         if (kb.IsKeyDown(Keys.S))
-            position -= front * Speed * deltaT;
+            Position -= front * Speed * deltaT;
         if (kb.IsKeyDown(Keys.A))
-            position -= right * Speed * deltaT;
+            Position -= right * Speed * deltaT;
         if (kb.IsKeyDown(Keys.D))
-            position += right * Speed * deltaT;
+            Position += right * Speed * deltaT;
         if (kb.IsKeyDown(Keys.LeftShift))
-            position += up * Speed * deltaT;
+            Position += up * Speed * deltaT;
         if (kb.IsKeyDown(Keys.LeftControl))
-            position -= up * Speed * deltaT;
+            Position -= up * Speed * deltaT;
     }
 }

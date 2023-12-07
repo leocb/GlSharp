@@ -47,6 +47,11 @@ public class Engine : GameWindow {
         GL.Enable(EnableCap.DebugOutputSynchronous);
 #endif
 
+        GL.Enable(EnableCap.CullFace);
+        GL.CullFace(CullFaceMode.Back);
+        GL.FrontFace(FrontFaceDirection.Ccw);
+
+
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);

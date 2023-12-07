@@ -6,9 +6,18 @@ namespace GlSharp.Shaders;
 public class Program : IProgram {
     private readonly int handle;
     private readonly Dictionary<string, int> locationMap = new();
+    private static readonly Dictionary<int, int> programList = new();
 
     public Program(string vertexSourceName, string fragmentSourceName) {
+
+        int hash = vertexSourceName.GetHashCode() + fragmentSourceName.GetHashCode();
+
+        if (programList.TryGetValue(hash, out handle))
+            return;
+
         handle = GlslCompiler.CreateProgram(vertexSourceName, fragmentSourceName);
+
+        programList.Add(hash, handle);
     }
 
     public void Use() {
@@ -37,15 +46,11 @@ public class Program : IProgram {
     public void SetMat4(string uniformName, Matrix4 value) => GL.UniformMatrix4(GetUniformLocation(uniformName), true, ref value);
     public void SetVec3(string uniformName, Vector3 value) => GL.Uniform3(GetUniformLocation(uniformName), ref value);
 
-    protected virtual void Dispose(bool disposing) {
-        if (!disposing)
-            return;
+    public static void UnloadAllPrograms() {
+        foreach (KeyValuePair<int, int> item in programList) {
+            GL.DeleteProgram(item.Value);
+        }
 
-        GL.DeleteProgram(handle);
-    }
-
-    public void Dispose() {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        programList.Clear();
     }
 }

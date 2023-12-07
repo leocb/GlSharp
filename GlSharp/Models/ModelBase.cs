@@ -94,7 +94,6 @@ public abstract class ModelBase : IEntity {
 
     protected virtual void Dispose(bool disposing) {
         if (disposing) {
-            Material.Dispose();
             GL.DeleteBuffer(vertexHandle);
             GL.DeleteBuffer(ebo);
             GL.DeleteVertexArray(vao);

@@ -38,16 +38,4 @@ public abstract class MaterialBase : IMaterial {
             TextureLoader.Use(TextureHandles[i], TextureUnit.Texture0 + i);
         }
     }
-
-    protected virtual void Dispose(bool disposing) {
-        if (!disposing)
-            return;
-
-        Program.Dispose();
-    }
-
-    public void Dispose() {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
 }

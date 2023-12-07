@@ -43,7 +43,7 @@ internal static class GlslCompiler {
             string infoLog = GL.GetShaderInfoLog(handle);
             Console.WriteLine(infoLog);
         }
-
+        
         return handle;
     }
 }

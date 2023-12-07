@@ -10,10 +10,9 @@ public static class SceneManager {
     private static IScene activeScene = new BlankScene();
 
     public static void SetActiveScene(IScene scene) {
+        activeScene.Close();
         scene.Load();
-        IScene prevScene = activeScene;
         activeScene = scene;
-        prevScene.Close();
     }
 
     public static void Update(FrameEventArgs args) {

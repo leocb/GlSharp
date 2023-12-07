@@ -67,5 +67,6 @@ internal static class TextureLoader {
     public static void UnloadAllTextures() {
         int[] texHandles = textureList.Values.ToArray();
         GL.DeleteTextures(texHandles.Length, texHandles);
+        textureList.Clear();
     }
 }

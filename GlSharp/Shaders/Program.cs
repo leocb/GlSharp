@@ -43,6 +43,7 @@ public class Program : IProgram {
     }
 
     public void SetInt(string uniformName, int value) => GL.Uniform1(GetUniformLocation(uniformName), value);
+    public void SetFloat(string uniformName, float value) => GL.Uniform1(GetUniformLocation(uniformName), value);
     public void SetMat4(string uniformName, Matrix4 value) => GL.UniformMatrix4(GetUniformLocation(uniformName), true, ref value);
     public void SetVec3(string uniformName, Vector3 value) => GL.Uniform3(GetUniformLocation(uniformName), ref value);
 

@@ -7,35 +7,19 @@ namespace GlSharp.Materials;
 public abstract class MaterialBase : IMaterial {
 
     public Shaders.Program Program { get; private set; }
-    private int[] textureHandles = Array.Empty<int>();
 
-    private int[] TextureHandles {
-        get => textureHandles;
-        set {
-            textureHandles = value;
+    protected int[] textureHandles;
 
-            if (textureHandles.Length <= 0)
-                return;
-
-            Tools.TsGlCall(() => {
-                Program.Use();
-                for (int i = 0; i < value?.Length; i++) {
-                    Program.SetInt($"texture{i}", i);
-                }
-            });
-        }
-    }
-
-    protected MaterialBase(int[] textures, string vertexShader, string fragShader) {
+    protected MaterialBase(string vertexShader, string fragShader, int[]? textures = null) {
         Program = new Shaders.Program(vertexShader, fragShader);
-        TextureHandles = textures ?? Array.Empty<int>();
+        textureHandles = textures ?? Array.Empty<int>();
     }
 
     public virtual void Use() {
         Program.Use();
 
-        for (int i = 0; i < TextureHandles.Length; i++) {
-            TextureLoader.Use(TextureHandles[i], TextureUnit.Texture0 + i);
+        for (int i = 0; i < textureHandles.Length; i++) {
+            TextureLoader.Use(textureHandles[i], TextureUnit.Texture0 + i);
         }
     }
 }

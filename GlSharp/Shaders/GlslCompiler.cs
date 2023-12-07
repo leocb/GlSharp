@@ -20,6 +20,7 @@ internal static class GlslCompiler {
         if (success == 0) {
             string infoLog = GL.GetProgramInfoLog(handle);
             Console.WriteLine(infoLog);
+            _ = Console.Read();
         }
 
         // Clean up
@@ -42,8 +43,9 @@ internal static class GlslCompiler {
         if (result == 0) {
             string infoLog = GL.GetShaderInfoLog(handle);
             Console.WriteLine(infoLog);
+            _ = Console.Read();
         }
-        
+
         return handle;
     }
 }

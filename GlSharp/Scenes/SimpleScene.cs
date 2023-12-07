@@ -1,6 +1,7 @@
 ﻿using GlSharp.Behavior;
 using GlSharp.Cameras;
 using GlSharp.Entities;
+using GlSharp.Materials;
 using GlSharp.Models;
 using GlSharp.Scene;
 
@@ -16,11 +17,11 @@ public class SimpleScene : SceneBase {
 
         entityList.Add(new PlaneModel(new(0f, 0f, 0f), null, null, null));
         entityList.Add(new CubeModel(new(1.5f, 0f, 0f), null, null, new() {new RandomRotationBehavior()}));
-        entityList.Add(new CubeModel(new(2.5f, 0f, 0f), null, null, new() {new RandomRotationBehavior()}));
-        entityList.Add(new CubeModel(new(3.5f, 0f, 0f), null, null, new() {new RandomRotationBehavior()}));
-        entityList.Add(new CubeModel(new(4.5f, 0f, 0f), null, null, new() {new RandomRotationBehavior()}));
-        entityList.Add(new CubeModel(new(5.5f, 0f, 0f), null, null, new() {new RandomRotationBehavior()}));
-        entityList.Add(new CubeModel(new(6.5f, 0f, 0f), null, null, new() {new RandomRotationBehavior()}));
+        entityList.Add(new CubeModel(new(2.5f, 0f, 0f), null, null, null, new AwesomeCrateMaterial()));
+        entityList.Add(new CubeModel(new(3.5f, 0f, 0f), null, null, null, new AwesomeCrateMaterial()));
+        entityList.Add(new CubeModel(new(4.5f, 0f, 0f), null, null, null, new AwesomeCrateMaterial()));
+        entityList.Add(new CubeModel(new(5.5f, 0f, 0f), null, null, null, new AwesomeCrateMaterial()));
+        entityList.Add(new CubeModel(new(6.5f, 0f, 0f), null, null, null, new AwesomeCrateMaterial()));
         entityList.Add(new CubeModel(new(-1.5f, 0f, 0f), null, null, null));
     }
 

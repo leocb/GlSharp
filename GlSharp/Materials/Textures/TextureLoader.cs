@@ -6,13 +6,16 @@ namespace GlSharp.Materials.Textures;
 
 internal static class TextureLoader {
 
-    private static readonly Dictionary<int,int> textureList = new System.Collections.Generic.Dictionary<int,int>();
+    private static readonly Dictionary<int, int> textureList = new();
+
+    private static readonly int missingHandle = Load("missing.png", false, minFilter: TextureMinFilter.Nearest, magFilter: TextureMagFilter.Nearest, isManaged: false);
 
     public static int Load(string fileName,
                            bool generateMipmap = true,
                            TextureWrapMode wrapMode = TextureWrapMode.Repeat,
                            TextureMinFilter minFilter = TextureMinFilter.LinearMipmapLinear,
-                           TextureMagFilter magFilter = TextureMagFilter.Linear) {
+                           TextureMagFilter magFilter = TextureMagFilter.Linear,
+                           bool isManaged = true) {
 
         // First, check if a texture with all the parameters was already created
         int hash = fileName.GetHashCode() + generateMipmap.GetHashCode() + wrapMode.GetHashCode() + minFilter.GetHashCode() + magFilter.GetHashCode();
@@ -21,8 +24,14 @@ internal static class TextureLoader {
             return handle;
 
         // Load the image
+        string fullFilePath = Path.Combine(Environment.CurrentDirectory, "Assets", "Textures", fileName);
+
+        if (!File.Exists(fullFilePath)) {
+            return missingHandle;
+        }
+
         StbImage.stbi_set_flip_vertically_on_load(1);
-        using FileStream fs = File.OpenRead(Path.Combine(Environment.CurrentDirectory, "Assets", "Textures", fileName));
+        using FileStream fs = File.OpenRead(fullFilePath);
         ImageResult image = ImageResult.FromStream(fs, ColorComponents.RedGreenBlueAlpha);
 
         // Upload texture to GPU
@@ -54,7 +63,8 @@ internal static class TextureLoader {
 
         });
 
-        textureList.Add(hash, handle);
+        if (isManaged)
+            textureList.Add(hash, handle);
 
         return handle;
     }

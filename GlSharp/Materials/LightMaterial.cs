@@ -4,7 +4,7 @@ using OpenTK.Mathematics;
 namespace GlSharp.Materials;
 public class LightMaterial : MaterialBase {
     public LightMaterial(Vector3 lightColor)
-        : base(Array.Empty<int>(), "Light.vert", "Light.frag") {
+        : base("Light.vert", "Light.frag") {
 
         Tools.TsGlCall(() => {
             Program.Use();

@@ -4,7 +4,7 @@ using OpenTK.Mathematics;
 namespace GlSharp.Materials;
 public class PhongMaterial : MaterialBase {
     public PhongMaterial(Vector3 objectColor, Vector3 lightColor, Vector3 lightPos)
-        : base(Array.Empty<int>(), "Basic.vert", "Phong.frag") {
+        : base("Basic.vert", "Phong.frag") {
 
         Tools.TsGlCall(() => {
             Program.Use();

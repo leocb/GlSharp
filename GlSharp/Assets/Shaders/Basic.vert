@@ -15,15 +15,17 @@ out vec3 VertColor;
 
 void main()
 {
-    gl_Position = vec4(aPos, 1.0) * model * view * projection;
-
-    // Transform normals
+    // Rotate and deal with scale for the normals
     mat3 normalMatrix = mat3(transpose(inverse(model)));
     Normal = normalize(aNormal * normalMatrix);
 
-    // Transform positions for frag
+    // vertex world positions for frag light
     FragPos = vec3(vec4(aPos, 1.0) * model);
 
+    // other vertex attribs
     TexCoord = aTexCoord;
     VertColor = aColor;
+
+    // final screen-space positions (mvp)
+    gl_Position = vec4(aPos, 1.0) * model * view * projection;
 }

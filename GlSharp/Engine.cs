@@ -56,7 +56,7 @@ public class Engine : GameWindow {
         // GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);
 
-        SceneManager.SetActiveScene(new LightScene());
+        SceneManager.SetActiveScene(new LightMapsScene());
 
     }
 

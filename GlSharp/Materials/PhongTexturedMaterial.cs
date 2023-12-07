@@ -1,12 +1,23 @@
 ﻿
+using GlSharp.Materials.Textures;
 using GlSharp.Objects;
 
 using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
-public class PhongGoldMaterial : MaterialBase {
-    public PhongGoldMaterial(PointLightObj light)
-        : base("Basic.vert", "PhongParameterized.frag") {
+public class PhongTexturedMaterial : MaterialBase {
+    public PhongTexturedMaterial(PointLightObj light, string DiffuseTexName)
+        : base("Basic.vert", "PhongTextured.frag") {
+
+        var texNames = DiffuseTexName.Split('.');
+
+        int diffuseTextHandle = TextureLoader.Load($"{texNames[0]}.{texNames[1]}");
+        int SpecularTextHandle = TextureLoader.Load($"{texNames[0]}_specular.{texNames[1]}");
+
+        textureHandles = new int[] {
+            diffuseTextHandle,
+            SpecularTextHandle
+        };
 
         Tools.TsGlCall(() => {
             Program.Use();
@@ -16,10 +27,11 @@ public class PhongGoldMaterial : MaterialBase {
             Program.SetVec3("light.diffuse", light.DifuseColor);
             Program.SetVec3("light.specular", light.SpecularColor);
 
-            Program.SetVec3("material.ambient", new Vector3(0.24725f, 0.1995f, 0.0745f));
-            Program.SetVec3("material.diffuse", new Vector3(0.75164f, 0.60648f, 0.22648f));
-            Program.SetVec3("material.specular", new Vector3(0.628281f, 0.555802f, 0.366065f));
-            Program.SetFloat("material.shininess", 0.4f * 128.0f);
+            // Textures
+            // int value is defined by the order which the texture was added to the textureHandles array above
+            Program.SetInt("material.diffuse", 0);
+            Program.SetInt("material.specular", 1);
+            Program.SetFloat("material.shininess", 0.8f * 128.0f);
         });
     }
 

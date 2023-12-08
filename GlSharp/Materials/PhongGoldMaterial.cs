@@ -1,5 +1,6 @@
 ﻿
 using GlSharp.Objects;
+using GlSharp.Tools;
 
 using OpenTK.Mathematics;
 
@@ -8,7 +9,7 @@ public class PhongGoldMaterial : MaterialBase {
     public PhongGoldMaterial(PointLightObj light)
         : base("Basic.vert", "PhongParameterized.frag") {
 
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
 
             Program.SetVec3("light.position", light.Position);
@@ -25,7 +26,7 @@ public class PhongGoldMaterial : MaterialBase {
 
     public void UpdateLight(PointLightObj light) {
 
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
             Program.SetVec3("light.position", light.Position);
             Program.SetVec3("light.ambient", light.AmbientColor);
@@ -35,7 +36,7 @@ public class PhongGoldMaterial : MaterialBase {
     }
 
     public void UpdateCamera(Vector3 cameraPosition) {
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
             Program.SetVec3("viewPos", cameraPosition);
         });

@@ -1,9 +1,11 @@
-﻿using GlSharp.Cameras;
+﻿using GlSharp.Behavior;
+using GlSharp.Cameras;
 using GlSharp.Entities;
 using GlSharp.Materials;
 using GlSharp.Models;
 using GlSharp.Objects;
 using GlSharp.Scene;
+using GlSharp.Tools;
 
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -12,14 +14,14 @@ namespace GlSharp.Scenes;
 public class LightMapsScene : SceneBase {
 
     private PhongTexturedMaterial phongMat;
-    private PointLightObj light;
+    private SunLightObj light;
 
     public override void Load() {
         ActiveCamera = new FreeCamera();
         ActiveCamera.Init(Engine.window.MousePosition, Engine.window.Size);
 
         light = new(
-            new(0.6f, 2f, 1.5f),
+            new(-0.2f, -1.0f, -0.3f),
             new(1.0f, 1.0f, 1.0f),
             new(0.2f, 0.2f, 0.2f),
             new(1.0f, 1.0f, 1.0f),
@@ -28,12 +30,15 @@ public class LightMapsScene : SceneBase {
         phongMat = new(light, "container2.png");
 
         entityList.Add(light);
+        
+        for(int i = 0; i < 10; i++) {
         entityList.Add(new CubeModel(
-            new(0f, 0f, 0f),
-            null,
+            MathTools.GetRandomUnitVector() * (Random.Shared.NextSingle() * 10f),
+            MathTools.GetRandomRotation(),
             null,
             null,
             phongMat));
+        }
     }
 
     public override void Update(FrameEventArgs args) {

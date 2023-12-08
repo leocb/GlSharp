@@ -2,6 +2,7 @@
 using GlSharp.Entities;
 using GlSharp.Materials;
 using GlSharp.Scene;
+using GlSharp.Tools;
 
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
@@ -34,7 +35,7 @@ public abstract class ModelBase : IEntity {
         ebo = GL.GenBuffer();
         vertexHandle = GL.GenBuffer();
 
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             // Vertex Array Object - Bundles the data into a single buffer
             GL.BindVertexArray(vao);
 
@@ -72,11 +73,11 @@ public abstract class ModelBase : IEntity {
     }
 
     public virtual void Update(float time) {
-        this.behaviorList.ForEach(b => b.Update(this, time));
+        behaviorList.ForEach(b => b.Update(this, time));
     }
 
     public virtual void Draw(float time) {
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             GL.BindVertexArray(vao);
             Material.Use();
 #warning TODO: Only upload again if changed

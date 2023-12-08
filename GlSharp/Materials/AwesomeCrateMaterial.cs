@@ -1,4 +1,5 @@
 ﻿using GlSharp.Materials.Textures;
+using GlSharp.Tools;
 
 namespace GlSharp.Materials;
 internal class AwesomeCrateMaterial : MaterialBase {
@@ -8,7 +9,7 @@ internal class AwesomeCrateMaterial : MaterialBase {
                 TextureLoader.Load("container.jpg")
             }) {
 
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
             for (int i = 0; i < textureHandles?.Length; i++) {
                 Program.SetInt($"texture{i}", i);

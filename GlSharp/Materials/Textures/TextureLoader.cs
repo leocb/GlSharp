@@ -1,4 +1,6 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using GlSharp.Tools;
+
+using OpenTK.Graphics.OpenGL;
 
 using StbImageSharp;
 
@@ -36,7 +38,7 @@ internal static class TextureLoader {
 
         // Upload texture to GPU
         handle = GL.GenTexture();
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             GL.BindTexture(TextureTarget.Texture2D, handle);
             GL.TexImage2D(
                 TextureTarget.Texture2D,

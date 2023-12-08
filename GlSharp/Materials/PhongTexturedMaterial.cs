@@ -1,15 +1,16 @@
 ﻿
 using GlSharp.Materials.Textures;
 using GlSharp.Objects;
+using GlSharp.Tools;
 
 using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
 public class PhongTexturedMaterial : MaterialBase {
-    public PhongTexturedMaterial(PointLightObj light, string DiffuseTexName)
+    public PhongTexturedMaterial(SunLightObj light, string DiffuseTexName)
         : base("Basic.vert", "PhongTextured.frag") {
 
-        var texNames = DiffuseTexName.Split('.');
+        string[] texNames = DiffuseTexName.Split('.');
 
         int diffuseTextHandle = TextureLoader.Load($"{texNames[0]}.{texNames[1]}");
         int SpecularTextHandle = TextureLoader.Load($"{texNames[0]}_specular.{texNames[1]}");
@@ -19,9 +20,10 @@ public class PhongTexturedMaterial : MaterialBase {
             SpecularTextHandle
         };
 
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
 
+            Program.SetVec3("light.direction", light.Direction);
             Program.SetVec3("light.position", light.Position);
             Program.SetVec3("light.ambient", light.AmbientColor);
             Program.SetVec3("light.diffuse", light.DifuseColor);
@@ -37,7 +39,7 @@ public class PhongTexturedMaterial : MaterialBase {
 
     public void UpdateLight(PointLightObj light) {
 
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
             Program.SetVec3("light.position", light.Position);
             Program.SetVec3("light.ambient", light.AmbientColor);
@@ -47,7 +49,7 @@ public class PhongTexturedMaterial : MaterialBase {
     }
 
     public void UpdateCamera(Vector3 cameraPosition) {
-        Tools.TsGlCall(() => {
+        GlTools.TsGlCall(() => {
             Program.Use();
             Program.SetVec3("viewPos", cameraPosition);
         });

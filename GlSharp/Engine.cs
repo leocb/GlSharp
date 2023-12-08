@@ -2,11 +2,11 @@
 
 using GlSharp.Scene;
 using GlSharp.Scenes;
+using GlSharp.Tools;
 
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp;
 
@@ -35,7 +35,7 @@ public class Engine : GameWindow {
 
     private void EngineLoad() {
         PrintHardwareSupport();
-        Tools.ShowFpsCounter(this);
+        FpsTools.ShowFpsCounter(this);
 
         CursorState = CursorState.Grabbed;
         //VSync = VSyncMode.On;
@@ -51,7 +51,6 @@ public class Engine : GameWindow {
         GL.CullFace(CullFaceMode.Back);
         GL.FrontFace(FrontFaceDirection.Ccw);
 
-
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         // GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);
@@ -64,7 +63,7 @@ public class Engine : GameWindow {
         if (!IsFocused)
             return;
 
-        Tools.UpdateAverageFps(obj.Time);
+        FpsTools.UpdateAverageFps(obj.Time);
         SceneManager.Update(obj);
     }
 

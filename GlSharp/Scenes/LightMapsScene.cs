@@ -1,5 +1,4 @@
-﻿using GlSharp.Behavior;
-using GlSharp.Cameras;
+﻿using GlSharp.Cameras;
 using GlSharp.Entities;
 using GlSharp.Materials;
 using GlSharp.Models;
@@ -14,30 +13,31 @@ namespace GlSharp.Scenes;
 public class LightMapsScene : SceneBase {
 
     private PhongTexturedMaterial phongMat;
-    private SunLightObj light;
+    private PointLightObj light;
 
     public override void Load() {
         ActiveCamera = new FreeCamera();
         ActiveCamera.Init(Engine.window.MousePosition, Engine.window.Size);
 
         light = new(
-            new(-0.2f, -1.0f, -0.3f),
+            new(0.6f, 1.0f, 1.5f),
             new(1.0f, 1.0f, 1.0f),
             new(0.2f, 0.2f, 0.2f),
             new(1.0f, 1.0f, 1.0f),
+            50f, 2f,
             null);
 
         phongMat = new(light, "container2.png");
 
         entityList.Add(light);
-        
-        for(int i = 0; i < 10; i++) {
-        entityList.Add(new CubeModel(
-            MathTools.GetRandomUnitVector() * (Random.Shared.NextSingle() * 10f),
-            MathTools.GetRandomRotation(),
-            null,
-            null,
-            phongMat));
+
+        for (int i = 0; i < 10; i++) {
+            entityList.Add(new CubeModel(
+                MathTools.GetRandomUnitVector() * (Random.Shared.NextSingle() * 10f),
+                MathTools.GetRandomRotation(),
+                null,
+                null,
+                phongMat));
         }
     }
 

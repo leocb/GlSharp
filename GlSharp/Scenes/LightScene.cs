@@ -25,6 +25,7 @@ public class LightScene : SceneBase {
             new(0.5f, 0.5f, 0.5f),
             new(0.2f, 0.2f, 0.2f),
             new(1.0f, 1.0f, 1.0f),
+            32f,1f,
             null);
 
         goldMaterial = new(light);

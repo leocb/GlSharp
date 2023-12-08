@@ -7,7 +7,7 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
 public class PhongTexturedMaterial : MaterialBase {
-    public PhongTexturedMaterial(SunLightObj light, string DiffuseTexName)
+    public PhongTexturedMaterial(PointLightObj light, string DiffuseTexName)
         : base("Basic.vert", "PhongTextured.frag") {
 
         string[] texNames = DiffuseTexName.Split('.');
@@ -23,11 +23,15 @@ public class PhongTexturedMaterial : MaterialBase {
         GlTools.TsGlCall(() => {
             Program.Use();
 
-            Program.SetVec3("light.direction", light.Direction);
+            //Program.SetVec3("light.direction", light.Direction);
             Program.SetVec3("light.position", light.Position);
             Program.SetVec3("light.ambient", light.AmbientColor);
             Program.SetVec3("light.diffuse", light.DifuseColor);
             Program.SetVec3("light.specular", light.SpecularColor);
+            
+            Program.SetFloat("light.Kc", light.KConstant);
+            Program.SetFloat("light.Kl", light.KLinear);
+            Program.SetFloat("light.Kq", light.KQuadratic);
 
             // Textures
             // int value is defined by the order which the texture was added to the textureHandles array above

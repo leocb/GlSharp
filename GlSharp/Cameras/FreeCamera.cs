@@ -6,6 +6,7 @@ namespace GlSharp.Cameras;
 public class FreeCamera : ICamera {
 
     public Vector3 Position { get; private set; } = new(0.0f, 0.0f, 3.0f);
+    public Vector3 Direction { get => front; }
     private Vector3 front = new(0.0f, 0.0f, 0.0f);
     private Vector3 up = Vector3.UnitY;
     private Vector3 right = Vector3.UnitX;
@@ -32,7 +33,7 @@ public class FreeCamera : ICamera {
     }
 
     public void UpdateViewMatrix() {
-        ViewMatrix = Matrix4.LookAt(Position, Position + front, up);
+        ViewMatrix = Matrix4.LookAt(Position, Position + Direction, up);
     }
 
     public void ChangeWindowSize(Vector2 newWindowSize) {
@@ -69,15 +70,15 @@ public class FreeCamera : ICamera {
         front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(yaw));
         front = Vector3.Normalize(front);
 
-        right = Vector3.Normalize(Vector3.Cross(front, Vector3.UnitY));
-        up = Vector3.Normalize(Vector3.Cross(right, front));
+        right = Vector3.Normalize(Vector3.Cross(Direction, Vector3.UnitY));
+        up = Vector3.Normalize(Vector3.Cross(right, Direction));
     }
 
     private void UpdateCameraPosition(KeyboardState kb, float deltaT) {
         if (kb.IsKeyDown(Keys.W))
-            Position += front * Speed * deltaT;
+            Position += Direction * Speed * deltaT;
         if (kb.IsKeyDown(Keys.S))
-            Position -= front * Speed * deltaT;
+            Position -= Direction * Speed * deltaT;
         if (kb.IsKeyDown(Keys.A))
             Position -= right * Speed * deltaT;
         if (kb.IsKeyDown(Keys.D))

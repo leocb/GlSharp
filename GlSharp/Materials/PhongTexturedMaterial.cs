@@ -7,7 +7,7 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
 public class PhongTexturedMaterial : MaterialBase {
-    public PhongTexturedMaterial(PointLightObj light, string DiffuseTexName)
+    public PhongTexturedMaterial(SpotLight light, string DiffuseTexName)
         : base("Basic.vert", "PhongTextured.frag") {
 
         string[] texNames = DiffuseTexName.Split('.');
@@ -23,8 +23,10 @@ public class PhongTexturedMaterial : MaterialBase {
         GlTools.TsGlCall(() => {
             Program.Use();
 
-            //Program.SetVec3("light.direction", light.Direction);
             Program.SetVec3("light.position", light.Position);
+            Program.SetVec3("light.direction", light.Direction);
+            Program.SetFloat("light.cutOffStart", light.CutOffStart);
+            Program.SetFloat("light.cutOffEnd", light.CutOffEnd);
             Program.SetVec3("light.ambient", light.AmbientColor);
             Program.SetVec3("light.diffuse", light.DifuseColor);
             Program.SetVec3("light.specular", light.SpecularColor);
@@ -41,11 +43,12 @@ public class PhongTexturedMaterial : MaterialBase {
         });
     }
 
-    public void UpdateLight(PointLightObj light) {
+    public void UpdateLight(SpotLight light) {
 
         GlTools.TsGlCall(() => {
             Program.Use();
             Program.SetVec3("light.position", light.Position);
+            Program.SetVec3("light.direction", light.Direction);
             Program.SetVec3("light.ambient", light.AmbientColor);
             Program.SetVec3("light.diffuse", light.DifuseColor);
             Program.SetVec3("light.specular", light.SpecularColor);

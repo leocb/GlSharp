@@ -6,7 +6,7 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
 public class PhongGoldMaterial : MaterialBase {
-    public PhongGoldMaterial(PointLightObj light)
+    public PhongGoldMaterial(PointLight light)
         : base("Basic.vert", "PhongParameterized.frag") {
 
         GlTools.TsGlCall(() => {
@@ -24,7 +24,7 @@ public class PhongGoldMaterial : MaterialBase {
         });
     }
 
-    public void UpdateLight(PointLightObj light) {
+    public void UpdateLight(PointLight light) {
 
         GlTools.TsGlCall(() => {
             Program.Use();

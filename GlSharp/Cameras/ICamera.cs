@@ -3,6 +3,7 @@
 namespace GlSharp.Cameras;
 public interface ICamera {
     Vector3 Position { get; }
+    Vector3 Direction { get; }
     Matrix4 ProjectionMatrix { get; }
     Matrix4 ViewMatrix { get; }
     float Sensitivity { get; set; }

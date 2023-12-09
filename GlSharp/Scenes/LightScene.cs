@@ -14,7 +14,7 @@ public class LightScene : SceneBase {
 
     private PhongGoldMaterial goldMaterial;
     private Vector3 lightColor;
-    private PointLightObj light;
+    private PointLight light;
 
     public override void Load() {
         ActiveCamera = new FreeCamera();

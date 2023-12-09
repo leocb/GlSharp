@@ -6,6 +6,7 @@ using GlSharp.Objects;
 using GlSharp.Scene;
 using GlSharp.Tools;
 
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
@@ -13,14 +14,17 @@ namespace GlSharp.Scenes;
 public class LightMapsScene : SceneBase {
 
     private PhongTexturedMaterial phongMat;
-    private PointLightObj light;
+    private SpotLight light;
 
     public override void Load() {
         ActiveCamera = new FreeCamera();
         ActiveCamera.Init(Engine.window.MousePosition, Engine.window.Size);
 
         light = new(
-            new(0.6f, 1.0f, 1.5f),
+            SceneManager.GetActiveCamera.Position,
+            SceneManager.GetActiveCamera.Direction,
+            14f,
+            18f,
             new(1.0f, 1.0f, 1.0f),
             new(0.2f, 0.2f, 0.2f),
             new(1.0f, 1.0f, 1.0f),
@@ -55,7 +59,10 @@ public class LightMapsScene : SceneBase {
             camera.UpdateOrientationPosition(Engine.window.MousePosition, keyboard, (float)args.Time);
         }
 
+        light.Position = SceneManager.GetActiveCamera.Position;
+        light.Direction = SceneManager.GetActiveCamera.Direction;
         phongMat.UpdateCamera(SceneManager.GetActiveCamera.Position);
+        phongMat.UpdateLight(light);
 
         foreach (IEntity entity in entityList) {
             entity.Update((float)args.Time);

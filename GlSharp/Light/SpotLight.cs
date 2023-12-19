@@ -5,7 +5,8 @@ using GlSharp.Models;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Objects;
-public class SpotLight : ModelBase {
+public class SpotLight : ModelBase
+{
 
     public override float[] Vertices => Array.Empty<float>();
     public override uint[] Indices => Array.Empty<uint>();
@@ -22,7 +23,8 @@ public class SpotLight : ModelBase {
     public float KQuadratic { get; private set; }
 
     public SpotLight(Vector3? position, Vector3 direction, float cutOffStart, float cutOffEnd, Vector3 difuseColor, Vector3 ambientColor, Vector3 specularColor, float range, float intensity, List<IBehavior>? behaviorList)
-        : base(position, null, null, behaviorList) {
+        : base(position, null, null, behaviorList)
+    {
 
         DifuseColor = difuseColor;
         AmbientColor = ambientColor;

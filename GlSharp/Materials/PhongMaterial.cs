@@ -4,11 +4,14 @@ using GlSharp.Tools;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
-public class PhongMaterial : MaterialBase {
+public class PhongMaterial : MaterialBase
+{
     public PhongMaterial(Vector3 objectColor, Vector3 lightColor, Vector3 lightPos)
-        : base("Basic.vert", "Phong.frag") {
+        : base("Basic.vert", "Phong.frag")
+    {
 
-        GlTools.TsGlCall(() => {
+        GlTools.TsGlCall(() =>
+        {
             Program.Use();
             Program.SetVec3("objectColor", objectColor);
             Program.SetVec3("lightColor", lightColor);
@@ -16,9 +19,11 @@ public class PhongMaterial : MaterialBase {
         });
     }
 
-    public void UpdateLight(Vector3? lightPos = null, Vector3? lightColor = null) {
+    public void UpdateLight(Vector3? lightPos = null, Vector3? lightColor = null)
+    {
 
-        GlTools.TsGlCall(() => {
+        GlTools.TsGlCall(() =>
+        {
             Program.Use();
             if (lightPos is not null)
                 Program.SetVec3("lightPos", (Vector3)lightPos);
@@ -27,8 +32,10 @@ public class PhongMaterial : MaterialBase {
         });
     }
 
-    public void UpdateCamera(Vector3 cameraPosition) {
-        GlTools.TsGlCall(() => {
+    public void UpdateCamera(Vector3 cameraPosition)
+    {
+        GlTools.TsGlCall(() =>
+        {
             Program.Use();
             Program.SetVec3("viewPos", cameraPosition);
         });

@@ -6,9 +6,11 @@ using GlSharp.Tools;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Materials;
-public class PhongTexturedMaterial : MaterialBase {
+public class PhongTexturedMaterial : MaterialBase
+{
     public PhongTexturedMaterial(SpotLight flashlight, PointLight[] lamps, SunLight sun, string DiffuseTexName)
-        : base("Basic.vert", "PhongTextured.frag") {
+        : base("Basic.vert", "PhongTextured.frag")
+    {
 
         string[] texNames = DiffuseTexName.Split('.');
 
@@ -20,7 +22,8 @@ public class PhongTexturedMaterial : MaterialBase {
             SpecularTextHandle
         };
 
-        GlTools.TsGlCall(() => {
+        GlTools.TsGlCall(() =>
+        {
             Program.Use();
 
             // Flashlight
@@ -61,16 +64,20 @@ public class PhongTexturedMaterial : MaterialBase {
         });
     }
 
-    public void UpdateFlashlight(SpotLight light) {
-        GlTools.TsGlCall(() => {
+    public void UpdateFlashlight(SpotLight light)
+    {
+        GlTools.TsGlCall(() =>
+        {
             Program.Use();
             Program.SetVec3("spotLight.position", light.Position);
             Program.SetVec3("spotLight.direction", light.Direction);
         });
     }
 
-    public void UpdateCamera(Vector3 cameraPosition) {
-        GlTools.TsGlCall(() => {
+    public void UpdateCamera(Vector3 cameraPosition)
+    {
+        GlTools.TsGlCall(() =>
+        {
             Program.Use();
             Program.SetVec3("viewPos", cameraPosition);
         });

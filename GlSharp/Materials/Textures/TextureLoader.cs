@@ -6,7 +6,8 @@ using StbImageSharp;
 
 namespace GlSharp.Materials.Textures;
 
-internal static class TextureLoader {
+internal static class TextureLoader
+{
 
     private static readonly Dictionary<int, int> textureList = new();
 
@@ -17,7 +18,8 @@ internal static class TextureLoader {
                            TextureWrapMode wrapMode = TextureWrapMode.Repeat,
                            TextureMinFilter minFilter = TextureMinFilter.LinearMipmapLinear,
                            TextureMagFilter magFilter = TextureMagFilter.Linear,
-                           bool isManaged = true) {
+                           bool isManaged = true)
+    {
 
         // First, check if a texture with all the parameters was already created
         int hash = fileName.GetHashCode() + generateMipmap.GetHashCode() + wrapMode.GetHashCode() + minFilter.GetHashCode() + magFilter.GetHashCode();
@@ -28,7 +30,8 @@ internal static class TextureLoader {
         // Load the image
         string fullFilePath = Path.Combine(Environment.CurrentDirectory, "Assets", "Textures", fileName);
 
-        if (!File.Exists(fullFilePath)) {
+        if (!File.Exists(fullFilePath))
+        {
             return missingHandle;
         }
 
@@ -38,7 +41,8 @@ internal static class TextureLoader {
 
         // Upload texture to GPU
         handle = GL.GenTexture();
-        GlTools.TsGlCall(() => {
+        GlTools.TsGlCall(() =>
+        {
             GL.BindTexture(TextureTarget.Texture2D, handle);
             GL.TexImage2D(
                 TextureTarget.Texture2D,
@@ -71,12 +75,14 @@ internal static class TextureLoader {
         return handle;
     }
 
-    public static void Use(int handle, TextureUnit unit = TextureUnit.Texture0) {
+    public static void Use(int handle, TextureUnit unit = TextureUnit.Texture0)
+    {
         GL.ActiveTexture(unit);
         GL.BindTexture(TextureTarget.Texture2D, handle);
     }
 
-    public static void UnloadAllTextures() {
+    public static void UnloadAllTextures()
+    {
         int[] texHandles = textureList.Values.ToArray();
         GL.DeleteTextures(texHandles.Length, texHandles);
         textureList.Clear();

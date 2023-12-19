@@ -4,7 +4,8 @@ using OpenTK.Windowing.Common;
 
 namespace GlSharp.Scene;
 
-public interface IScene {
+public interface IScene
+{
     ICamera ActiveCamera { get; set; }
     void Close();
     void Draw(FrameEventArgs args);

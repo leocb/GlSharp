@@ -4,7 +4,8 @@ using OpenTK.Mathematics;
 
 namespace GlSharp.Entities;
 
-public interface IEntity : IDisposable {
+public interface IEntity : IDisposable
+{
     Vector3 Position { get; set; }
     Vector3 Scale { get; set; }
     Quaternion Rotation { get; set; }

@@ -3,7 +3,8 @@
 using OpenTK.Graphics.OpenGL;
 
 namespace GlSharp;
-public static class Debug {
+public static class Debug
+{
 
     public static readonly DebugProc DebugMessageDelegate = OnDebugMessage;
     public static void OnDebugMessage(
@@ -14,7 +15,7 @@ public static class Debug {
     int length,             // Length of the string in pMessage.
     IntPtr pMessage,        // Pointer to message string.
     IntPtr pUserParam)      // The pointer you gave to OpenGL, explained later.
-{
+    {
         // In order to access the string pointed to by pMessage, you can use Marshal
         // class to copy its contents to a C# string without unsafe code. You can
         // also use the new function Marshal.PtrToStringUTF8 since .NET Core 1.1.

@@ -3,7 +3,8 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp.Cameras;
 
-public class FreeCamera : ICamera {
+public class FreeCamera : ICamera
+{
 
     public Vector3 Position { get; private set; } = new(0.0f, 0.0f, 3.0f);
     public Vector3 Direction { get => front; }
@@ -22,31 +23,37 @@ public class FreeCamera : ICamera {
     public Matrix4 ProjectionMatrix { get; private set; }
     public float Speed { get; set; } = 3.5f;
 
-    public void UpdateOrientationPosition(Vector2 mouse, KeyboardState kb, float deltaT) {
+    public void UpdateOrientationPosition(Vector2 mouse, KeyboardState kb, float deltaT)
+    {
         UpdateCameraOrientation(mouse);
         UpdateCameraPosition(kb, deltaT);
         UpdateViewMatrix();
     }
 
-    public void UpdateProjectionMatrix() {
+    public void UpdateProjectionMatrix()
+    {
         ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), windowSize.X / windowSize.Y, 0.1f, 100.0f);
     }
 
-    public void UpdateViewMatrix() {
+    public void UpdateViewMatrix()
+    {
         ViewMatrix = Matrix4.LookAt(Position, Position + Direction, up);
     }
 
-    public void ChangeWindowSize(Vector2 newWindowSize) {
+    public void ChangeWindowSize(Vector2 newWindowSize)
+    {
         windowSize = newWindowSize;
         UpdateProjectionMatrix();
     }
 
-    public void ChangeFov(float newFov, bool treatAsDelta = true) {
+    public void ChangeFov(float newFov, bool treatAsDelta = true)
+    {
         fov = MathHelper.Clamp(treatAsDelta ? fov + newFov : newFov, 1.0f, 90.0f);
         UpdateProjectionMatrix();
     }
 
-    public void Init(Vector2 mouse, Vector2 windowSize) {
+    public void Init(Vector2 mouse, Vector2 windowSize)
+    {
         this.windowSize = windowSize;
         lastMouse = new Vector2(mouse.X, mouse.Y);
         UpdateProjectionMatrix();
@@ -56,7 +63,8 @@ public class FreeCamera : ICamera {
 
     public void SetLookAt(Vector3 target) { }
 
-    private void UpdateCameraOrientation(Vector2 mouse) {
+    private void UpdateCameraOrientation(Vector2 mouse)
+    {
         float deltaX = mouse.X - lastMouse.X;
         float deltaY = mouse.Y - lastMouse.Y;
         lastMouse = new Vector2(mouse.X, mouse.Y);
@@ -74,7 +82,8 @@ public class FreeCamera : ICamera {
         up = Vector3.Normalize(Vector3.Cross(right, Direction));
     }
 
-    private void UpdateCameraPosition(KeyboardState kb, float deltaT) {
+    private void UpdateCameraPosition(KeyboardState kb, float deltaT)
+    {
         if (kb.IsKeyDown(Keys.W))
             Position += Direction * Speed * deltaT;
         if (kb.IsKeyDown(Keys.S))

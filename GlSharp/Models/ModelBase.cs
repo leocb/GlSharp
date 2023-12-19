@@ -8,7 +8,8 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Models;
-public abstract class ModelBase : IEntity {
+public abstract class ModelBase : IEntity
+{
 
     protected List<IBehavior> behaviorList;
     private readonly int vao; // Vertex Array Object
@@ -30,12 +31,14 @@ public abstract class ModelBase : IEntity {
 
     public abstract uint[] Indices { get; }
 
-    protected ModelBase(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList) {
+    protected ModelBase(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList)
+    {
         vao = GL.GenVertexArray();
         ebo = GL.GenBuffer();
         vertexHandle = GL.GenBuffer();
 
-        GlTools.TsGlCall(() => {
+        GlTools.TsGlCall(() =>
+        {
             // Vertex Array Object - Bundles the data into a single buffer
             GL.BindVertexArray(vao);
 
@@ -72,12 +75,15 @@ public abstract class ModelBase : IEntity {
         UpdateMatrix();
     }
 
-    public virtual void Update(float time) {
+    public virtual void Update(float time)
+    {
         behaviorList.ForEach(b => b.Update(this, time));
     }
 
-    public virtual void Draw(float time) {
-        GlTools.TsGlCall(() => {
+    public virtual void Draw(float time)
+    {
+        GlTools.TsGlCall(() =>
+        {
             GL.BindVertexArray(vao);
             Material.Use();
 #warning TODO: Only upload again if changed
@@ -89,19 +95,23 @@ public abstract class ModelBase : IEntity {
         });
     }
 
-    public void UpdateMatrix() {
+    public void UpdateMatrix()
+    {
         ModelMatrix = Matrix4.CreateScale(Scale) * Matrix4.CreateFromQuaternion(rotation) * Matrix4.CreateTranslation(position);
     }
 
-    protected virtual void Dispose(bool disposing) {
-        if (disposing) {
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
             GL.DeleteBuffer(vertexHandle);
             GL.DeleteBuffer(ebo);
             GL.DeleteVertexArray(vao);
         }
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }

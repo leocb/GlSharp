@@ -2,9 +2,11 @@
 
 namespace GlSharp.Shaders;
 
-internal static class GlslCompiler {
+internal static class GlslCompiler
+{
 
-    public static int CreateProgram(string vertexSourceName, string fragmentSourceName) {
+    public static int CreateProgram(string vertexSourceName, string fragmentSourceName)
+    {
         // Compile
         int vertexHandle = CompileShader(vertexSourceName, ShaderType.VertexShader);
         int fragmentHandle = CompileShader(fragmentSourceName, ShaderType.FragmentShader);
@@ -17,7 +19,8 @@ internal static class GlslCompiler {
 
         // Check for failure
         GL.GetProgram(handle, GetProgramParameterName.LinkStatus, out int success);
-        if (success == 0) {
+        if (success == 0)
+        {
             string infoLog = GL.GetProgramInfoLog(handle);
             Console.WriteLine(infoLog);
             _ = Console.Read();
@@ -32,7 +35,8 @@ internal static class GlslCompiler {
         return handle;
     }
 
-    private static int CompileShader(string sourceName, ShaderType type) {
+    private static int CompileShader(string sourceName, ShaderType type)
+    {
         // Compile
         int handle = GL.CreateShader(type);
         GL.ShaderSource(handle, File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Assets", "Shaders", sourceName)));
@@ -40,7 +44,8 @@ internal static class GlslCompiler {
 
         // Check for failure
         GL.GetShader(handle, ShaderParameter.CompileStatus, out int result);
-        if (result == 0) {
+        if (result == 0)
+        {
             string infoLog = GL.GetShaderInfoLog(handle);
             Console.WriteLine(infoLog);
             _ = Console.Read();

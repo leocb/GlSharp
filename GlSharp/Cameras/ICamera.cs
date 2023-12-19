@@ -1,7 +1,8 @@
 ﻿using OpenTK.Mathematics;
 
 namespace GlSharp.Cameras;
-public interface ICamera {
+public interface ICamera
+{
     Vector3 Position { get; }
     Vector3 Direction { get; }
     Matrix4 ProjectionMatrix { get; }

@@ -10,14 +10,16 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace GlSharp.Scenes;
-public class LightMapsScene : SceneBase {
+public class LightMapsScene : SceneBase
+{
 
     private PhongTexturedMaterial phongMat;
     private SunLight sun;
     private PointLight[] lamps;
     private SpotLight flashlight;
 
-    public override void Load() {
+    public override void Load()
+    {
         ActiveCamera = new FreeCamera();
         ActiveCamera.Init(Engine.window.MousePosition, Engine.window.Size);
 
@@ -64,7 +66,8 @@ public class LightMapsScene : SceneBase {
 
         entityList.Add(flashlight);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++)
+        {
             entityList.Add(new CubeModel(
                 MathTools.GetRandomUnitVector() * (Random.Shared.NextSingle() * 10f),
                 MathTools.GetRandomRotation(),
@@ -74,7 +77,8 @@ public class LightMapsScene : SceneBase {
         }
     }
 
-    public override void Update(FrameEventArgs args) {
+    public override void Update(FrameEventArgs args)
+    {
 
         KeyboardState keyboard = Engine.window.KeyboardState;
 
@@ -84,7 +88,8 @@ public class LightMapsScene : SceneBase {
         if (keyboard.IsKeyDown(Keys.R))
             SceneManager.SetActiveScene(new LightMapsScene());
 
-        if (SceneManager.GetActiveCamera is FreeCamera camera) {
+        if (SceneManager.GetActiveCamera is FreeCamera camera)
+        {
             camera.UpdateOrientationPosition(Engine.window.MousePosition, keyboard, (float)args.Time);
         }
 
@@ -93,7 +98,8 @@ public class LightMapsScene : SceneBase {
         phongMat.UpdateCamera(SceneManager.GetActiveCamera.Position);
         phongMat.UpdateFlashlight(flashlight);
 
-        foreach (IEntity entity in entityList) {
+        foreach (IEntity entity in entityList)
+        {
             entity.Update((float)args.Time);
         }
     }

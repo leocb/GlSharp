@@ -5,7 +5,8 @@ using GlSharp.Models;
 using OpenTK.Mathematics;
 
 namespace GlSharp.Objects;
-public class SunLight : ModelBase {
+public class SunLight : ModelBase
+{
 
     public override float[] Vertices => Array.Empty<float>();
     public override uint[] Indices => Array.Empty<uint>();
@@ -16,7 +17,8 @@ public class SunLight : ModelBase {
     public Vector3 Direction { get; set; }
 
     public SunLight(Vector3 direction, Vector3 difuseColor, Vector3 ambientColor, Vector3 specularColor, List<IBehavior>? behaviorList)
-        : base(null, null, null, behaviorList) {
+        : base(null, null, null, behaviorList)
+    {
 
         Direction = direction.Normalized();
         DifuseColor = difuseColor;
@@ -26,7 +28,8 @@ public class SunLight : ModelBase {
         Material = new LightMaterial(DifuseColor);
     }
 
-    public override void Draw(float time) {
+    public override void Draw(float time)
+    {
         //sun has no geometry
     }
 }

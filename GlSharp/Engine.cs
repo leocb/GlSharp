@@ -10,20 +10,23 @@ using OpenTK.Windowing.Desktop;
 
 namespace GlSharp;
 
-public class Engine : GameWindow {
+public class Engine : GameWindow
+{
     public const string TITLE = "Lengine";
 
     public static GameWindow window;
     public static Stopwatch Time { get; } = Stopwatch.StartNew();
 
     public Engine(int width, int height)
-        : base(GameWindowSettings.Default, new NativeWindowSettings() {
+        : base(GameWindowSettings.Default, new NativeWindowSettings()
+        {
             Size = (width, height),
             Title = TITLE,
 #if DEBUG
             Flags = ContextFlags.Debug
 #endif
-        }) {
+        })
+    {
         this.Resize += EngineResize;
         this.Load += EngineLoad;
         this.RenderFrame += EngineRenderFrame;
@@ -33,7 +36,8 @@ public class Engine : GameWindow {
         window = this;
     }
 
-    private void EngineLoad() {
+    private void EngineLoad()
+    {
         PrintHardwareSupport();
         FpsTools.ShowFpsCounter(this);
 
@@ -59,7 +63,8 @@ public class Engine : GameWindow {
 
     }
 
-    private void EngineUpdateFrame(FrameEventArgs obj) {
+    private void EngineUpdateFrame(FrameEventArgs obj)
+    {
         if (!IsFocused)
             return;
 
@@ -67,22 +72,26 @@ public class Engine : GameWindow {
         SceneManager.Update(obj);
     }
 
-    private void EngineRenderFrame(FrameEventArgs obj) {
+    private void EngineRenderFrame(FrameEventArgs obj)
+    {
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         SceneManager.Draw(obj);
         SwapBuffers();
     }
 
-    private void EngineResize(ResizeEventArgs e) {
+    private void EngineResize(ResizeEventArgs e)
+    {
         GL.Viewport(0, 0, e.Width, e.Height);
         SceneManager.GetActiveCamera.ChangeWindowSize(Size);
     }
 
-    private void EngineMouseWheel(MouseWheelEventArgs obj) {
+    private void EngineMouseWheel(MouseWheelEventArgs obj)
+    {
         SceneManager.GetActiveCamera.ChangeFov(-obj.OffsetY);
     }
 
-    private static void PrintHardwareSupport() {
+    private static void PrintHardwareSupport()
+    {
         GL.GetInteger(GetPName.MaxVertexAttribs, out int nrAttributes);
         Console.WriteLine($"Hardware supports:");
         Console.WriteLine($"Max number of vertex attributes: {nrAttributes}");

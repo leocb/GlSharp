@@ -13,10 +13,8 @@ namespace GlSharp.Scenes;
 public class LightMapsScene : SceneBase
 {
 
-    private PhongTexturedMaterial phongMat;
-    private SunLight sun;
-    private PointLight[] lamps;
-    private SpotLight flashlight;
+    private PhongTexturedMaterial? phongMat;
+    private SpotLight? flashlight;
 
     public override void Load()
     {
@@ -33,7 +31,7 @@ public class LightMapsScene : SceneBase
             50f, 2f, null);
         entityList.Add(flashlight);
 
-        lamps = new PointLight[]{
+        PointLight[] lamps = new PointLight[]{
             new(new(0.7f, 0.2f, 2.0f),
                 new(1.0f, 1.0f, 0f),
                 new(0.2f, 0.2f, 0f),
@@ -60,7 +58,7 @@ public class LightMapsScene : SceneBase
         entityList.Add(lamps[2]);
         entityList.Add(lamps[3]);
 
-        sun = new(
+        SunLight sun = new(
             new(-1.0f, -1.0f, -1.0f),
             new(1.0f, .98f, .9f),
             new(0.0f, 0.1f, 0.2f),
@@ -97,10 +95,14 @@ public class LightMapsScene : SceneBase
             camera.UpdateOrientationPosition(Engine.window.MousePosition, keyboard, (float)args.Time);
         }
 
-        flashlight.Position = SceneManager.GetActiveCamera.Position;
-        flashlight.Direction = SceneManager.GetActiveCamera.Direction;
-        phongMat.UpdateCamera(SceneManager.GetActiveCamera.Position);
-        phongMat.UpdateFlashlight(flashlight);
+        if (flashlight is not null)
+        {
+            flashlight.Position = SceneManager.GetActiveCamera.Position;
+            flashlight.Direction = SceneManager.GetActiveCamera.Direction;
+            phongMat?.UpdateFlashlight(flashlight);
+        }
+
+        phongMat?.UpdateCamera(SceneManager.GetActiveCamera.Position);
 
         foreach (IEntity entity in entityList)
         {

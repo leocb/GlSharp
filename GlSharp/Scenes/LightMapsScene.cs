@@ -31,6 +31,7 @@ public class LightMapsScene : SceneBase
             new(0.1f, 0f, 0f),
             new(1.0f, .8f, .8f),
             50f, 2f, null);
+        entityList.Add(flashlight);
 
         lamps = new PointLight[]{
             new(new(0.7f, 0.2f, 2.0f),
@@ -54,6 +55,10 @@ public class LightMapsScene : SceneBase
                 new(0f, 1.0f, 0f),
                 50f, 2f, null)
         };
+        entityList.Add(lamps[0]);
+        entityList.Add(lamps[1]);
+        entityList.Add(lamps[2]);
+        entityList.Add(lamps[3]);
 
         sun = new(
             new(-1.0f, -1.0f, -1.0f),
@@ -61,10 +66,9 @@ public class LightMapsScene : SceneBase
             new(0.0f, 0.1f, 0.2f),
             new(1.0f, .98f, .9f),
             null);
+        entityList.Add(sun);
 
         phongMat = new(flashlight, lamps, sun, "container2.png");
-
-        entityList.Add(flashlight);
 
         for (int i = 0; i < 10; i++)
         {

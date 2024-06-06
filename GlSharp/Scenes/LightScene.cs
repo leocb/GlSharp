@@ -33,31 +33,31 @@ public class LightScene : SceneBase
         goldMaterial = new(light);
 
         entityList.Add(light);
-        entityList.Add(new CubeModel(
+        entityList.Add(new SimpleCubeModel(
             new(0f, 0f, 0f),
             null,
             null,
             null,
             goldMaterial));
-        entityList.Add(new CubeModel(
+        entityList.Add(new SimpleCubeModel(
             new(1.5f, 0f, 1.5f),
             null,
             null,
             null,
             goldMaterial));
-        entityList.Add(new CubeModel(
+        entityList.Add(new SimpleCubeModel(
             new(-1.5f, 0f, -1.5f),
             null,
             null,
             null,
             goldMaterial));
-        entityList.Add(new CubeModel(
+        entityList.Add(new SimpleCubeModel(
             new(1.5f, 0f, -1.5f),
             null,
             null,
             null,
             goldMaterial));
-        entityList.Add(new CubeModel(
+        entityList.Add(new SimpleCubeModel(
             new(-1.5f, 0f, 1.5f),
             null,
             null,

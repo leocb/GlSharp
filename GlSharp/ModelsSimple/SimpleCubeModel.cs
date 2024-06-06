@@ -3,8 +3,8 @@ using GlSharp.Materials;
 
 using OpenTK.Mathematics;
 
-namespace GlSharp.Models;
-public class CubeModel : ModelBase
+namespace GlSharp.ModelsSimple;
+public class SimpleCubeModel : SimpleModelBase
 {
 
     public override float[] Vertices => new float[] {
@@ -50,7 +50,7 @@ public class CubeModel : ModelBase
         20,21,22,23,22,21,
     };
 
-    public CubeModel(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList, IMaterial? materialOverride = null) : base(position, rotation, scale, behaviorList)
+    public SimpleCubeModel(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList, IMaterial? materialOverride = null) : base(position, rotation, scale, behaviorList)
     {
         // Material
         Material = materialOverride ?? new VertexColorMaterial();

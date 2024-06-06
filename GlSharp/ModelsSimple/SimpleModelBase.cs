@@ -7,8 +7,8 @@ using GlSharp.Tools;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace GlSharp.Models;
-public abstract class ModelBase : IEntity
+namespace GlSharp.ModelsSimple;
+public abstract class SimpleModelBase : IEntity
 {
 
     protected List<IBehavior> behaviorList;
@@ -31,7 +31,7 @@ public abstract class ModelBase : IEntity
 
     public abstract uint[] Indices { get; }
 
-    protected ModelBase(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList)
+    protected SimpleModelBase(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList)
     {
         vao = GL.GenVertexArray();
         ebo = GL.GenBuffer();

@@ -3,9 +3,9 @@ using GlSharp.Materials;
 
 using OpenTK.Mathematics;
 
-namespace GlSharp.Models;
+namespace GlSharp.ModelsSimple;
 
-public class PlaneModel : ModelBase
+public class SimplePlaneModel : SimpleModelBase
 {
 
     public override float[] Vertices => new float[] {
@@ -21,7 +21,7 @@ public class PlaneModel : ModelBase
         2, 3, 1,   // second triangle
     };
 
-    public PlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList) : base(position, rotation, scale, behaviorList)
+    public SimplePlaneModel(Vector3? position, Quaternion? rotation, Vector3? scale, List<IBehavior>? behaviorList) : base(position, rotation, scale, behaviorList)
     {
         // Material
         Material = new AwesomeCrateMaterial();

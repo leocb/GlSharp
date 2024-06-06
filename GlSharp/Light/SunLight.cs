@@ -1,11 +1,11 @@
 ﻿using GlSharp.Behavior;
 using GlSharp.Materials;
-using GlSharp.Models;
+using GlSharp.ModelsSimple;
 
 using OpenTK.Mathematics;
 
 namespace GlSharp.Objects;
-public class SunLight : ModelBase
+public class SunLight : SimpleModelBase
 {
 
     public override float[] Vertices => Array.Empty<float>();

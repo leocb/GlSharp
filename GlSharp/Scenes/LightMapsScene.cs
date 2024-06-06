@@ -70,7 +70,7 @@ public class LightMapsScene : SceneBase
 
         for (int i = 0; i < 10; i++)
         {
-            entityList.Add(new CubeModel(
+            entityList.Add(new SimpleCubeModel(
                 MathTools.GetRandomUnitVector() * (Random.Shared.NextSingle() * 10f),
                 MathTools.GetRandomRotation(),
                 null,

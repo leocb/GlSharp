@@ -41,7 +41,8 @@ public class Engine : GameWindow
         PrintHardwareSupport();
 
         CursorState = CursorState.Grabbed;
-        RawMouseInput = true;
+        if (SupportsRawMouseInput)
+            RawMouseInput = true;
         //VSync = VSyncMode.On;
         //UpdateFrequency = 60;
 

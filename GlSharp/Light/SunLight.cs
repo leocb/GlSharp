@@ -1,6 +1,6 @@
 ﻿using GlSharp.Behavior;
 using GlSharp.Materials;
-using GlSharp.ModelsSimple;
+using GlSharp.Models.Simple;
 
 using OpenTK.Mathematics;
 

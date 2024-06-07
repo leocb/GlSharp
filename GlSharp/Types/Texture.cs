@@ -14,17 +14,26 @@ public static class Texture
     [StructLayout(LayoutKind.Sequential)]
     public struct Data
     {
-        public uint Id { get; set; }
+        public int Id { get; set; }
         public Type Type { get; set; }
     }
 
-    public static string ToName(this Type tt)
+    public static string ToName(this Type textureType)
     {
-        return tt switch
+        return textureType switch
         {
             Type.Diffuse => "diffuse",
             Type.Specular => "specular",
-            _ => "unknown", 
+            _ => "unknown",
+        };
+    }
+    public static Type FromName(string typeName)
+    {
+        return typeName switch
+        {
+            "diffuse" => Type.Diffuse,
+            "specular" => Type.Specular,
+            _ => Type.Diffuse,
         };
     }
 }

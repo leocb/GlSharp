@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 
 using GlSharp.Scene;
-using GlSharp.Scenes;
+using GlSharp.Content.Scenes;
 using GlSharp.Tools;
 
 using OpenTK.Graphics.OpenGL;
@@ -20,7 +20,7 @@ public class Engine : GameWindow
     public Engine(int width, int height)
         : base(GameWindowSettings.Default, new NativeWindowSettings()
         {
-            Size = (width, height),
+            ClientSize = (width, height),
             Title = TITLE,
 #if DEBUG
             Flags = ContextFlags.Debug
@@ -55,11 +55,11 @@ public class Engine : GameWindow
         GL.CullFace(CullFaceMode.Back);
         GL.FrontFace(FrontFaceDirection.Ccw);
 
-        GL.ClearColor(0f, 0f, 0f, 1.0f);
+        GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         // GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);
 
-        SceneManager.SetActiveScene(new LightMapsScene());
+        SceneManager.SetActiveScene(new FirstModelScene());
 
     }
 

@@ -7,10 +7,12 @@ using GlSharp.Types;
 using OpenTK.Graphics.OpenGL;
 
 namespace GlSharp.Mesh;
-public class MeshBase
+public class MeshBase : IDisposable
 {
     //  render data
-    private int vao;
+    private readonly int vao;
+    private readonly int ebo;
+    private readonly int vbo;
 
     public List<Vertex.Data> Vertices { get; set; }
     public List<int> Indices { get; set; }
@@ -23,6 +25,10 @@ public class MeshBase
         Indices = indices;
         Textures = textures;
         Program = program;
+
+        vao = GL.GenVertexArray();
+        ebo = GL.GenBuffer();
+        vbo = GL.GenBuffer();
 
         GlTools.TsGlCall(SetupMesh);
         GlTools.TsGlCall(SetupTextures);
@@ -48,16 +54,13 @@ public class MeshBase
 
     private void SetupMesh()
     {
-        vao = GL.GenVertexArray();
-        int ebo = GL.GenBuffer();
-        int vbo = GL.GenBuffer();
-
         // Vertex Array Object
         GL.BindVertexArray(vao);
 
         // Vertices
         GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-        GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Count * Marshal.SizeOf<Vertex.Data>(), Vertices.ToArray(), BufferUsageHint.StaticDraw);
+        int size = Marshal.SizeOf<Vertex.Data>();
+        GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Count * size, Vertices.ToArray(), BufferUsageHint.StaticDraw);
 
         // Element Buffer
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
@@ -66,37 +69,38 @@ public class MeshBase
         // Vertices attributes (data layout)
         // position
         GL.EnableVertexAttribArray(0);
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false,
-            Marshal.SizeOf<Vertex.Data>(),
-            Marshal.OffsetOf<Vertex.Data>(nameof(Vertex.Data.Position)));
+        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, Marshal.SizeOf<Vertex.Data>(), 0 * sizeof(float));
 
         // normal
         GL.EnableVertexAttribArray(1);
-        GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false,
-            Marshal.SizeOf<Vertex.Data>(),
-            Marshal.OffsetOf<Vertex.Data>(nameof(Vertex.Data.Normal)));
+        GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, Marshal.SizeOf<Vertex.Data>(), 3 * sizeof(float));
 
         // UV
         GL.EnableVertexAttribArray(2);
-        GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false,
-            Marshal.SizeOf<Vertex.Data>(),
-            Marshal.OffsetOf<Vertex.Data>(nameof(Vertex.Data.TexCoords)));
+        GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, Marshal.SizeOf<Vertex.Data>(), (3 + 3) * sizeof(float));
     }
 
     private void SetupTextures()
     {
-        int diffuseNr = 1;
-        int specularNr = 1;
-
         for (int i = 0; i < Textures.Count; i++)
         {
-            int number = Textures[i].Type switch
-            {
-                Texture.Type.Diffuse => diffuseNr++,
-                Texture.Type.Specular => specularNr++,
-                _ => 0
-            };
-            Program.SetInt($"material.{Textures[i].Type.ToName()}{number}", i);
+            Program.SetInt($"material.{Textures[i].Type.ToName()}", i);
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            GL.DeleteBuffer(vbo);
+            GL.DeleteBuffer(ebo);
+            GL.DeleteVertexArray(vao);
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

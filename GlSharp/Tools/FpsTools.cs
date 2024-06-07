@@ -13,12 +13,13 @@ internal static class FpsTools
     }
     internal static void ShowFpsCounter(NativeWindow window)
     {
+        fpsDeltas.Put(1f);
         _ = Task.Run(async () =>
         {
             while (true)
             {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                window.Title = $"{Engine.TITLE} - {AverageFps:0.0}FPS";
+                window.Title = $"{Engine.TITLE} - {AverageFps:0.00}FPS";
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
             }
         });
     }

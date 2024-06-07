@@ -12,7 +12,7 @@ namespace GlSharp;
 
 public class Engine : GameWindow
 {
-    public const string TITLE = "Lengine";
+    public const string TITLE = "GlSharp";
 
     public static GameWindow window;
     public static Stopwatch Time { get; } = Stopwatch.StartNew();
@@ -21,7 +21,7 @@ public class Engine : GameWindow
         : base(GameWindowSettings.Default, new NativeWindowSettings()
         {
             ClientSize = (width, height),
-            Title = TITLE,
+            Title = "Loading...",
 #if DEBUG
             Flags = ContextFlags.Debug
 #endif

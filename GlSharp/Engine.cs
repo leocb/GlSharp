@@ -41,7 +41,8 @@ public class Engine : GameWindow
         PrintHardwareSupport();
 
         CursorState = CursorState.Grabbed;
-        VSync = VSyncMode.On;
+        RawMouseInput = true;
+        //VSync = VSyncMode.On;
         //UpdateFrequency = 60;
 
 #if DEBUG
@@ -55,7 +56,7 @@ public class Engine : GameWindow
         GL.FrontFace(FrontFaceDirection.Ccw);
 
         GL.ClearColor(0.553f, 0.796f, 0.992f, 1.0f);
-        // GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+        GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
         GL.Enable(EnableCap.DepthTest);
 
         SceneManager.SetActiveScene(new FirstModelScene());

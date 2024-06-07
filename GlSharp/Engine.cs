@@ -39,7 +39,6 @@ public class Engine : GameWindow
     private void EngineLoad()
     {
         PrintHardwareSupport();
-        FpsTools.ShowFpsCounter(this);
 
         CursorState = CursorState.Grabbed;
         VSync = VSyncMode.On;
@@ -61,6 +60,7 @@ public class Engine : GameWindow
 
         SceneManager.SetActiveScene(new FirstModelScene());
 
+        FpsTools.ShowFpsCounter(this);
     }
 
     private void EngineUpdateFrame(FrameEventArgs obj)

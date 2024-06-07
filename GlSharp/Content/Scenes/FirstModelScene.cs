@@ -62,19 +62,19 @@ public class FirstModelScene : SceneBase
 
         SunLight sun = new(
             new(-1.0f, -1.0f, -1.0f),
-            new(1.5f, 1.48f, 1.4f),
+            new(1.0f, 0.98f, 0.9f),
             new(0.0f, 0.1f, 0.2f),
-            new(1.5f, 1.48f, 1.4f),
+            new(1.0f, 0.98f, 0.9f),
             null);
         entityList.Add(sun);
 
         phongMat = new(flashlight, lamps, sun);
 
         entityList.Add(new ModelBase(
-            "backpack",
+            "sponza",
             new(0, 0, 0),
             new(0, 0, 0),
-            null,
+            new(.01f,.01f,.01f),
             null,
             phongMat));
     }

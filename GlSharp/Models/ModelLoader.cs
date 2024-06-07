@@ -20,7 +20,7 @@ public static class ModelLoader
         using AssimpContext context = new();
 
 #warning this can throw errors, deal with them... somehow
-        Assimp.Scene scene = context.ImportFile(ModelFilePath, PostProcessSteps.Triangulate | PostProcessSteps.FlipUVs);
+        Assimp.Scene scene = context.ImportFile(ModelFilePath, PostProcessSteps.Triangulate);
 
         processNode(scene.RootNode, scene, meshes, shader, modelName);
 
@@ -81,15 +81,21 @@ public static class ModelLoader
         {
             Material material = scene.Materials[mesh.MaterialIndex];
 
-            textures.Add(new()
-            {
-                Id = TextureLoader.Load(Path.Combine(modelName, material.TextureSpecular.FilePath)),
-                Type = Texture.Type.Specular
-            });
-            textures.Add(new() { 
-                Id = TextureLoader.Load(Path.Combine(modelName,material.TextureDiffuse.FilePath)),
-                Type = Texture.Type.Diffuse
-            });
+            if (material.HasTextureDiffuse)
+                textures.Add(new()
+                {
+                    Id = TextureLoader.Load(
+                        Path.Combine(modelName, material.TextureDiffuse.FilePath.Replace("textures/", ""))),
+                    Type = Texture.Type.Diffuse
+                });
+
+            if (material.HasTextureSpecular)
+                textures.Add(new()
+                {
+                    Id = TextureLoader.Load(
+                        Path.Combine(modelName, material.TextureSpecular.FilePath.Replace("textures/", ""))),
+                    Type = Texture.Type.Specular
+                });
         }
 
         return new(vertices, indices, textures, shader);

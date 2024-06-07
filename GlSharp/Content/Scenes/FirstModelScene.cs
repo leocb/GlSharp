@@ -26,7 +26,7 @@ public class FirstModelScene : SceneBase
             new(1.0f, 1.0f, 1.0f),
             new(0.1f, 0.1f, 0.1f),
             new(1.0f, 1.0f, 1.0f),
-            30f, 10f, null);
+            10f, 2f, null);
         entityList.Add(flashlight);
 
         PointLight[] lamps = [
@@ -35,25 +35,25 @@ public class FirstModelScene : SceneBase
                 new(1.0f, 0.8f, 0.8f),
                 new(0f, 0f, 0f),
                 new(1.0f, 0.8f, 0.8f),
-                50f, 1f, null),
+                30f, 1f, null),
             new PointLight(
                 new(3.0f, 2.0f, -3.0f),
                 new(0.8f, 1.0f, 0.8f),
                 new(0f, 0f, 0f),
                 new(0.8f, 1.0f, 0.8f),
-                50f, 2f, null),
+                30f, 1f, null),
             new PointLight(
                 new(-3.0f, 2.0f, 3.0f),
                 new(0.8f, 0.8f, 1.0f),
                 new(0f, 0f, 0f),
                 new(0.8f, 0.8f, 1.0f),
-                50f, 1f, null),
+                30f, 1f, null),
             new PointLight(
                 new(-3.0f, 2.0f, -3.0f),
                 new(1.0f, 1.0f, 0.8f),
                 new(0f, 0f, 0f),
                 new(1.0f, 1.0f, 0.8f),
-                50f, 1f, null)
+                30f, 1f, null),
         ];
         entityList.Add(lamps[0]);
         entityList.Add(lamps[1]);

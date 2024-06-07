@@ -52,6 +52,8 @@ public class Engine : GameWindow
         GL.Enable(EnableCap.DebugOutputSynchronous);
 #endif
 
+        //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+
         GL.Enable(EnableCap.CullFace);
         GL.CullFace(CullFaceMode.Back);
         GL.FrontFace(FrontFaceDirection.Ccw);

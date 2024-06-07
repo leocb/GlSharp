@@ -20,6 +20,7 @@ public class Engine : GameWindow
     public Engine(int width, int height)
         : base(GameWindowSettings.Default, new NativeWindowSettings()
         {
+            NumberOfSamples = 4,
             ClientSize = (width, height),
             Title = "Loading...",
 #if DEBUG
@@ -52,6 +53,9 @@ public class Engine : GameWindow
         GL.Enable(EnableCap.DebugOutputSynchronous);
 #endif
 
+        // MSAA
+        GL.Enable(EnableCap.Multisample);
+        
         //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
         GL.Enable(EnableCap.CullFace);

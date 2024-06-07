@@ -7,7 +7,7 @@ using GlSharp.Tools;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace GlSharp.ModelsSimple;
+namespace GlSharp.Models.Simple;
 public abstract class SimpleModelBase : IEntity
 {
 
@@ -50,11 +50,11 @@ public abstract class SimpleModelBase : IEntity
             // position
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), 0 * sizeof(float));
             // color
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), 3 * sizeof(float));
+            GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), 3 * sizeof(float));
             // uv
             GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), (3 + 3) * sizeof(float));
             // normal
-            GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), (3 + 3 + 2) * sizeof(float));
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, (3 + 3 + 2 + 3) * sizeof(float), (3 + 3 + 2) * sizeof(float));
 
             // Enable atributes
             GL.EnableVertexAttribArray(0);
@@ -86,9 +86,7 @@ public abstract class SimpleModelBase : IEntity
         {
             GL.BindVertexArray(vao);
             Material.Use();
-#warning TODO: Only upload again if changed
             Material.Program.SetMat4("model", ModelMatrix);
-#warning TODO: These 2 should be inside a shared uniform
             Material.Program.SetMat4("view", SceneManager.GetViewMatrix);
             Material.Program.SetMat4("projection", SceneManager.GetProjectionMatrix);
             GL.DrawElements(PrimitiveType.Triangles, Indices.Length, DrawElementsType.UnsignedInt, 0);

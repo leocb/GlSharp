@@ -85,17 +85,21 @@ public static class ModelLoader
                 textures.Add(new()
                 {
                     Id = TextureLoader.Load(
-                        Path.Combine(modelName, material.TextureDiffuse.FilePath.Replace("textures/", ""))),
+                        Path.Combine(modelName, material.TextureDiffuse.FilePath.Replace("textures\\", ""))),
                     Type = Texture.Type.Diffuse
                 });
+            else
+                textures.Add(new() { Id = 0, Type = Texture.Type.Diffuse });
 
             if (material.HasTextureSpecular)
                 textures.Add(new()
                 {
                     Id = TextureLoader.Load(
-                        Path.Combine(modelName, material.TextureSpecular.FilePath.Replace("textures/", ""))),
+                        Path.Combine(modelName, material.TextureSpecular.FilePath.Replace("textures\\", ""))),
                     Type = Texture.Type.Specular
                 });
+            else
+                textures.Add(new() { Id = 0, Type = Texture.Type.Specular });
         }
 
         return new(vertices, indices, textures, shader);

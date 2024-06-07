@@ -62,7 +62,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 void main()
 {
     // Alpha test, discard fragments that have less than 50% alpha
-    if(texture(material.specular, TexCoord).a < 0.5) {
+    if(texture(material.diffuse, TexCoord).a < 0.5) {
         discard;
     }
 

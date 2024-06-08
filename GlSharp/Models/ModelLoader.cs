@@ -1,5 +1,4 @@
-﻿
-using Assimp;
+﻿using Assimp;
 
 using GlSharp.Materials.Textures;
 using GlSharp.Mesh;
@@ -10,11 +9,18 @@ using GlSharp.Types;
 namespace GlSharp.Models;
 public static class ModelLoader
 {
+    private static readonly Dictionary<int, List<MeshBase>> modelList = [];
 
     public static List<MeshBase> LoadModel(string modelName, IProgram shader)
     {
         string ModelFilePath = Path.Combine(Environment.CurrentDirectory, "Assets", "Models", modelName, $"{modelName}.obj");
 
+        // First, check if an model was already loaded
+        int modelHash = modelName.GetHashCode() + shader.GetHashCode();
+        if (modelList.TryGetValue(modelHash, out List<MeshBase>? model) && model is not null)
+            return model;
+
+        // cache not available, load!
         List<MeshBase> meshes = [];
 
         using AssimpContext context = new();
@@ -24,8 +30,12 @@ public static class ModelLoader
 
         processNode(scene.RootNode, scene, meshes, shader, modelName);
 
+        modelList.Add(modelHash, meshes);
+
         return meshes;
     }
+
+    public static void ClearLoadedModels() => modelList.Clear();
 
     private static void processNode(Node node, Assimp.Scene scene, List<MeshBase> meshes, IProgram shader, string modelName)
     {
@@ -44,7 +54,6 @@ public static class ModelLoader
 
     private static MeshBase? processMesh(Assimp.Mesh mesh, Assimp.Scene scene, IProgram shader, string modelName)
     {
-
         if (!mesh.HasNormals || !mesh.HasVertices || !mesh.HasTextureCoords(0) || mesh.MaterialIndex <= 0)
         {
             Console.Error.WriteLine($"ERROR::ASSIMP::Mesh is missing some important data!");
@@ -82,24 +91,32 @@ public static class ModelLoader
             Material material = scene.Materials[mesh.MaterialIndex];
 
             if (material.HasTextureDiffuse)
+            {
                 textures.Add(new()
                 {
                     Id = TextureLoader.Load(
                         Path.Combine(modelName, material.TextureDiffuse.FilePath.Replace("textures\\", ""))),
                     Type = Texture.Type.Diffuse
                 });
+            }
             else
+            {
                 textures.Add(new() { Id = 0, Type = Texture.Type.Diffuse });
+            }
 
             if (material.HasTextureSpecular)
+            {
                 textures.Add(new()
                 {
                     Id = TextureLoader.Load(
                         Path.Combine(modelName, material.TextureSpecular.FilePath.Replace("textures\\", ""))),
                     Type = Texture.Type.Specular
                 });
+            }
             else
+            {
                 textures.Add(new() { Id = 0, Type = Texture.Type.Specular });
+            }
         }
 
         return new(vertices, indices, textures, shader);

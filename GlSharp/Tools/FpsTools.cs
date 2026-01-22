@@ -18,7 +18,9 @@ internal static class FpsTools
         {
             while (true)
             {
-                window.Title = $"{Engine.TITLE} - {AverageFps:0.00}FPS";
+                // Cocoa (MAC OS) Does not like a secondary thread changing the main window
+                //window.Title = $"{Engine.TITLE} - {AverageFps:0.00}FPS";
+                Console.WriteLine($"{Engine.TITLE} - {AverageFps:0.00}FPS");
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
             }
         });

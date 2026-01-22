@@ -48,7 +48,7 @@ public class FreeCamera : ICamera
 
     public void ChangeFov(float newFov, bool treatAsDelta = true)
     {
-        fov = MathHelper.Clamp(treatAsDelta ? fov + newFov : newFov, 1.0f, 90.0f);
+        fov = Math.Clamp(treatAsDelta ? fov + newFov : newFov, 1.0f, 90.0f);
         UpdateProjectionMatrix();
     }
 
@@ -71,7 +71,7 @@ public class FreeCamera : ICamera
 
         yaw += deltaX * Sensitivity;
 
-        pitch = MathHelper.Clamp(pitch - (deltaY * Sensitivity), -89.0f, 89.0f);
+        pitch = Math.Clamp(pitch - (deltaY * Sensitivity), -89.0f, 89.0f);
 
         front.X = (float)Math.Cos(MathHelper.DegreesToRadians(pitch)) * (float)Math.Cos(MathHelper.DegreesToRadians(yaw));
         front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(pitch));

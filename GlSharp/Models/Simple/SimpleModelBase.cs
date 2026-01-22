@@ -44,7 +44,7 @@ public abstract class SimpleModelBase : IEntity
 
             // The vertices data
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexHandle);
-            GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Length * sizeof(float), Vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Length * sizeof(float), Vertices, BufferUsage.StaticDraw);
 
             // Vertices attributes (data layout)
             // position
@@ -64,7 +64,7 @@ public abstract class SimpleModelBase : IEntity
 
             // Element Buffer Object - How to draw the vertices
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, Indices.Length * sizeof(uint), Indices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, Indices.Length * sizeof(uint), Indices, BufferUsage.StaticDraw);
         });
 
 

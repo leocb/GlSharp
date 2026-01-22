@@ -18,10 +18,10 @@ internal static class GlslCompiler
         GL.LinkProgram(handle);
 
         // Check for failure
-        GL.GetProgram(handle, GetProgramParameterName.LinkStatus, out int success);
+        GL.GetProgrami(handle, ProgramProperty.LinkStatus, out int success);
         if (success == 0)
         {
-            string infoLog = GL.GetProgramInfoLog(handle);
+            GL.GetProgramInfoLog(handle, out string infoLog);
             Console.WriteLine(infoLog);
             _ = Console.Read();
         }
@@ -43,10 +43,10 @@ internal static class GlslCompiler
         GL.CompileShader(handle);
 
         // Check for failure
-        GL.GetShader(handle, ShaderParameter.CompileStatus, out int result);
+        GL.GetShaderi(handle, ShaderParameterName.CompileStatus, out int result);
         if (result == 0)
         {
-            string infoLog = GL.GetShaderInfoLog(handle);
+            GL.GetShaderInfoLog(handle, out string infoLog);
             Console.WriteLine(infoLog);
             _ = Console.Read();
         }

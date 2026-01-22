@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using GlSharp.Scene;
 using GlSharp.Content.Scenes;
@@ -23,6 +24,8 @@ public class Engine : GameWindow
             NumberOfSamples = 4,
             ClientSize = (width, height),
             Title = "Loading...",
+            API = ContextAPI.OpenGL,
+            APIVersion = new Version(3,3),
 #if DEBUG
             Flags = ContextFlags.Debug
 #endif
@@ -44,11 +47,16 @@ public class Engine : GameWindow
         CursorState = CursorState.Grabbed;
         if (SupportsRawMouseInput)
             RawMouseInput = true;
-        //VSync = VSyncMode.On;
-        //UpdateFrequency = 60;
+        VSync = VSyncMode.On;
+        UpdateFrequency = 60;
 
 #if DEBUG
-        GL.DebugMessageCallback(Debug.DebugMessageDelegate, IntPtr.Zero);
+        // This causes the app to crash in Mac OS, no idea why
+        // GL.DebugMessageCallback((source, type, id, severity, length, pMessage, param) =>
+        // {
+        //     string message = Marshal.PtrToStringAnsi(pMessage, length);
+        //     Console.WriteLine("[{0} source={1} type={2} id={3}] {4}", severity, source, type, id, message);
+        // },[0]);
         GL.Enable(EnableCap.DebugOutput);
         GL.Enable(EnableCap.DebugOutputSynchronous);
 #endif
@@ -59,12 +67,12 @@ public class Engine : GameWindow
         //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
         GL.Enable(EnableCap.CullFace);
-        GL.CullFace(CullFaceMode.Back);
+        GL.CullFace(TriangleFace.Back);
         GL.FrontFace(FrontFaceDirection.Ccw);
 
         GL.ClearColor(0.553f, 0.796f, 0.992f, 1.0f);
-        GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-        GL.Enable(EnableCap.DepthTest);
+        //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest); // what did this do?
+        GL.Enable(EnableCap.DepthTest); 
 
         SceneManager.SetActiveScene(new FirstModelScene());
 
@@ -89,7 +97,7 @@ public class Engine : GameWindow
 
     private void EngineResize(ResizeEventArgs e)
     {
-        GL.Viewport(0, 0, e.Width, e.Height);
+        GL.Viewport(0, 0, this.FramebufferSize.X, FramebufferSize.Y);
         SceneManager.GetActiveCamera.ChangeWindowSize(Size);
     }
 

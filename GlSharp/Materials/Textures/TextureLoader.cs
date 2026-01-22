@@ -43,11 +43,11 @@ internal static class TextureLoader
         handle = GL.GenTexture();
         GlTools.TsGlCall(() =>
         {
-            GL.BindTexture(TextureTarget.Texture2D, handle);
+            GL.BindTexture(TextureTarget.Texture2d, handle);
             GL.TexImage2D(
-                TextureTarget.Texture2D,
+                TextureTarget.Texture2d,
                 0,
-                PixelInternalFormat.Rgba, // the format stored in the gpu
+                InternalFormat.Rgba, // the format stored in the gpu
                 image.Width,
                 image.Height,
                 0,
@@ -57,15 +57,15 @@ internal static class TextureLoader
 
             // Mipmaps
             if (generateMipmap)
-                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                GL.GenerateMipmap(TextureTarget.Texture2d);
 
             // Wrap mode
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrapMode);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrapMode);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, (int)wrapMode);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, (int)wrapMode);
 
             // Filter mode
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, (int)minFilter);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, (int)magFilter);
 
         });
 
@@ -78,7 +78,7 @@ internal static class TextureLoader
     public static void Use(int handle, TextureUnit unit = TextureUnit.Texture0)
     {
         GL.ActiveTexture(unit);
-        GL.BindTexture(TextureTarget.Texture2D, handle);
+        GL.BindTexture(TextureTarget.Texture2d, handle);
     }
 
     public static void UnloadAllTextures()

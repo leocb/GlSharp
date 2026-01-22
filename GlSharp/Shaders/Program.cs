@@ -49,10 +49,10 @@ public class Program : IProgram
         return location;
     }
 
-    public void SetInt(string uniformName, int value) => GL.Uniform1(GetUniformLocation(uniformName), value);
-    public void SetFloat(string uniformName, float value) => GL.Uniform1(GetUniformLocation(uniformName), value);
-    public void SetMat4(string uniformName, Matrix4 value) => GL.UniformMatrix4(GetUniformLocation(uniformName), true, ref value);
-    public void SetVec3(string uniformName, Vector3 value) => GL.Uniform3(GetUniformLocation(uniformName), ref value);
+    public void SetInt(string uniformName, int value) => GL.Uniform1i(GetUniformLocation(uniformName), value);
+    public void SetFloat(string uniformName, float value) => GL.Uniform1f(GetUniformLocation(uniformName), value);
+    public void SetMat4(string uniformName, Matrix4 value) => GL.UniformMatrix4f(GetUniformLocation(uniformName), 1, true, ref value);
+    public void SetVec3(string uniformName, Vector3 value) => GL.Uniform3f(GetUniformLocation(uniformName), 1, ref value);
 
     public static void UnloadAllPrograms()
     {

@@ -43,8 +43,11 @@ public class MeshBase : IDisposable
     {
         for (int i = 0; i < Textures.Count; i++)
         {
-            GL.ActiveTexture(TextureUnit.Texture0 + i);
-            GL.BindTexture(TextureTarget.Texture2D, Textures[i].Id);
+            if (!Enum.TryParse($"Texture{i}", out TextureUnit tUnit))
+                continue;
+            
+            GL.ActiveTexture(tUnit);
+            GL.BindTexture(TextureTarget.Texture2d, Textures[i].Id);
         }
 
         // draw mesh
@@ -60,11 +63,11 @@ public class MeshBase : IDisposable
         // Vertices
         GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
         int size = Marshal.SizeOf<Vertex.Data>();
-        GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Count * size, Vertices.ToArray(), BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ArrayBuffer, Vertices.Count * size, Vertices.ToArray(), BufferUsage.StaticDraw);
 
         // Element Buffer
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-        GL.BufferData(BufferTarget.ElementArrayBuffer, Indices.Count * sizeof(uint), Indices.ToArray(), BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ElementArrayBuffer, Indices.Count * sizeof(uint), Indices.ToArray(), BufferUsage.StaticDraw);
 
         // Vertices attributes (data layout)
         // position
